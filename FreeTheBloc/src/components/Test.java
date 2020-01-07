@@ -4,49 +4,90 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Test extends JFrame implements MouseMotionListener{
+public class Test extends JPanel implements MouseMotionListener, MouseListener{
 	Point point;
-	
+	int x = 50, y = 50;
+	int width = 50, height = 50;
+	int xOffset = 0, yOffset = 0;
+
 	public Test() {
-		init();
-	}
+		addMouseListener(this);
+		addMouseMotionListener(this);
 	
+	}
 	public static void main(String args[]) {
-		Test t = new Test();
+		Test first = new Test();
 		
-	}
-	
-	public void init() {
 		JFrame f = new JFrame();
+		f.setSize(500, 500);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(500,500);
-		f.addMouseMotionListener(this);
+		f.add(first);
 		f.setVisible(true);
 	}
-
-	@Override
-	public void paint(Graphics g) {
-		g.setColor(Color.red);
-		g.fillOval(point.x, point.y, 15,15);	
-	}
 	
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.setColor(Color.red);
+		g.fillRect(x, y, width, height);
+		
+	}
+
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("k");
-		point.setLocation(e.getX(),e.getY());
+		System.out.println(e.getX());
+		x = e.getX() - xOffset;
+		y = e.getY() - yOffset;
 		repaint();
+		
 	}
-
-
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+		xOffset = e.getX() - x;
+		yOffset = e.getY() - y;
+		System.out.println(e.getX());
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		xOffset = 0;
+		yOffset = 0;
+	}
+
+	
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

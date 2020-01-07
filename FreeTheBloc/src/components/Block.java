@@ -14,6 +14,7 @@ public class Block extends JButton{
 
 	int xPos, yPos; // the x and y postions of block in the puzzle layout
 	int wid, hei; // width and height of block in units
+	int xOffset, yOffset; // Offsets for moving the block
 	private int blockID; // the integer that represents the block in the puzzle layout
 	private boolean isHorizontal; // used to check which direction the block can slide in
 	private Puzzle puzzle; // the puzzle in which the block is used
@@ -37,18 +38,37 @@ public class Block extends JButton{
 		this.blockID = blockID;
 		this.isHorizontal = isHorizontal;
 		this.puzzle = puzzle;
+		this.setLayout(null);
 		this.setBackground(Color.red);
 		this.setSize(wid, hei);
 		this.setLocation(xPos, yPos);
 		this.lastCursorPoint = new Point();
+		this.xOffset = 0;
+		this.yOffset = 0;
 	}
 	
-	public void move(MouseEvent e) {
-		System.out.println("X " + e.getX() + " Y " + e.getY());
-		xPos = e.getX();
-		yPos = e.getY();
+	public void drag(MouseEvent e) {
+		System.out.println("block " + e.getX() +" " + e.getY());//eric
+		xPos = e.getX() - xOffset;
+		yPos = e.getY() - yOffset; 
 		setLocation(xPos, yPos);
 	}
 	
+	public void pressed(MouseEvent e) {
+		
+		xOffset = e.getX() - xPos;
+		yOffset = e.getY() - yPos;
+		System.out.println("pressed " + xOffset +" " + yOffset);//eric
+		
+	}
 	
+	public void released() {
+		xOffset = 0;
+		yOffset = 0;
+	}
+	
+	public void draw(Graphics g) {
+		g.setColor(Color.red);
+		g.fillRect(xPos, yPos, wid, hei);
+	}
 }

@@ -13,19 +13,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Puzzle extends Component implements MouseMotionListener {
+public class Puzzle extends JPanel implements MouseMotionListener, MouseListener{
 
 	// making block
-	Block red = new Block(50, 50, 50, 100, 1, true, this);
+	Block red = new Block(50, 50, 50, 50, 1, true, this);
 
 	JFrame f = new JFrame();
-	JButton blue = new JButton();
 
 	private int highScore, optimalScore, numMoves; // score information and number of moves
 	int[][] boardLayout; // all the blocks on the puzzle in a grid
 
-	// Blocks[] aBlocks = new Blocks[3];
-	// array to store all blocks
 
 	/**
 	 * @param optimalScore the best possible score for puzzle
@@ -36,12 +33,12 @@ public class Puzzle extends Component implements MouseMotionListener {
 		this.boardLayout = boardLayout;
 		this.highScore = 0;
 		this.numMoves = 0;
-
 	}
 
 	public void display() {
-
+		
 		red.addMouseMotionListener(this);
+		red.addMouseListener(this);
 
 		// ABSOLUTE LAYOUT POSITIONING
 		f.setLayout(null);
@@ -50,32 +47,58 @@ public class Puzzle extends Component implements MouseMotionListener {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setSize(500, 500);
 
-		blue.setLocation(100, 100);
-		blue.setSize(100, 100);
-		blue.setBackground(Color.blue);
-
-		f.add(blue);
-
 		f.add(red);
 		f.setVisible(true);
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		red.move(e);
-		repaint();
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-
 		
 	}
 
 	@Override
-	public void paint(Graphics g) {
-		g.setColor(Color.red);
-		g.fillRect(red.xPos, red.yPos, red.wid, red.hei);
+	public void mouseDragged(MouseEvent e) {
+		System.out.println("puz " + e.getX() +" " + e.getY());//eric
+		red.drag(e);
+		repaint();
+		
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		red.draw(g);
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		red.pressed(e);
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		red.released();
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 
