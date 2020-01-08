@@ -18,69 +18,59 @@ public class Puzzle extends JPanel implements MouseMotionListener, MouseListener
 	// making block
 	Block red = new Block(50, 50, 50, 50, 1, true, this);
 
-	JFrame f = new JFrame();
-
 	private int highScore, optimalScore, numMoves; // score information and number of moves
 	int[][] boardLayout; // all the blocks on the puzzle in a grid
-
+	int unitToPixels; // pixel value of length of one unit in boardLayout array
 
 	/**
 	 * @param optimalScore the best possible score for puzzle
 	 * @param boardLayout  all components on the board in an integer grid
 	 */
-	public Puzzle(int optimalScore, int[][] boardLayout) {
+	public Puzzle(int optimalScore, int[][] boardLayout, int unitToPixels) {
 		this.optimalScore = optimalScore;
 		this.boardLayout = boardLayout;
 		this.highScore = 0;
 		this.numMoves = 0;
-	}
-
-	public void display() {
-		
-		red.addMouseMotionListener(this);
-		red.addMouseListener(this);
-
-		// ABSOLUTE LAYOUT POSITIONING
-		f.setLayout(null);
-
-		// setting up frame
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(500, 500);
-
-		f.add(red);
-		f.setVisible(true);
+		this.unitToPixels = unitToPixels;
+		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
+		this.setSize(500, 500);
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		System.out.println("puz " + e.getX() +" " + e.getY());//eric
-		red.drag(e);
-		repaint();
-		
-	}
-
-	@Override
-	protected void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		red.draw(g);
 		
+	}
+	
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		red.mouseOver(e);
+		red.drag(e);
+		repaint();
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
+		
 		red.pressed(e);
+		red.drag(e);
+		repaint();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+		
 		red.released();
+		repaint();
+	}
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+
 	}
 	
 	@Override

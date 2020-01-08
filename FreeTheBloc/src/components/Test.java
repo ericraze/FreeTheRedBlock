@@ -42,7 +42,7 @@ public class Test extends JPanel implements MouseMotionListener, MouseListener{
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println(e.getX());
+		System.out.println(e.getX() + " " + e.getY());
 		x = e.getX() - xOffset;
 		y = e.getY() - yOffset;
 		repaint();
