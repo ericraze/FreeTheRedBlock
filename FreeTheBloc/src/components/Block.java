@@ -12,14 +12,19 @@ public class Block {
 	private boolean isRed; // Whether block is the red block
 	private boolean isPressed;
 	private boolean mouseIn;
-
-	public Block(int x, int y, int width, int height, boolean isHorizontal, boolean isRed) {
+	private Cell[][] cells; // Cells in game
+	private Game game; // game block is in
+	
+	public Block(int x, int y, int width, int height, boolean isHorizontal, boolean isRed, Cell[][] cells, Game game) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
 		this.isHorizontal = isHorizontal;
 		this.isRed = isRed;
+		this.cells = cells;
+		this.game = game;
+		
 		this.isPressed = false;
 		this.xOffset = 0;
 		this.yOffset = 0;
@@ -69,8 +74,8 @@ public class Block {
 				// if red, follow mouse x movement
 				x = e.getX() - xOffset;
 			}
-
-			
+			int[] cellUnder = cellOn(e.getX(), e.getY());
+			System.out.println(cellUnder[0] + " " + cellUnder[1]);//eric
 
 		}
 	}
@@ -87,5 +92,13 @@ public class Block {
 			mouseIn = false;
 		}
 	}
+	
+	public int[] cellOn(int x, int y) {
+		int cellX = (int) Math.floor(x / game.unitsToPixels);
+		int cellY = (int) Math.floor(y / game.unitsToPixels);
+		int[] cellOn = {cellX, cellY};
+		return cellOn;
+	}
+	
 
 }

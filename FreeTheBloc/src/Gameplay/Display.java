@@ -23,7 +23,7 @@ public class Display {
 		};
 		int unitsToPixels = 100;
 		
-		g = new Game(layout, unitsToPixels, size);
+		g = new Game(layout, unitsToPixels);
 		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setSize(size, size);

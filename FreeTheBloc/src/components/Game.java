@@ -13,29 +13,42 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	private Cell[][] cells;
 	private Block[] blocks;
 	private int counter = 0;
-
+	private int dimension = 0;
+	int unitsToPixels;
+	
 	// 0 = blank, 10's = horizontal, 20's = vertical, 30 = red
-	public Game(int[][] gameLayout, int unitsToPixels, int size) {
+	public Game(int[][] gameLayout, int unitsToPixels) {
 
+		this.unitsToPixels = unitsToPixels;
+		
 		// setting size of the game
-
-		setSize(size, size);
+		dimension = gameLayout.length * unitsToPixels;
+		
+		setSize(dimension, dimension);
 
 		// adding listeners to the game
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
 
-		// Amount of blocks in game
+		// Initializing cell array
+		cells = new Cell[gameLayout.length][gameLayout[0].length];
+		
+		// Amount of blocks in game and instantiating cells
 		for (int i = 0; i < gameLayout.length; i++) {
 			for (int j = 0; j < gameLayout[i].length; j++) {
+				
+				// instantiating cell object for each cell in array with the properties
+				// x, y, side length, value of block over cell
+				cells[j][i] = new Cell(j * unitsToPixels, i * unitsToPixels, unitsToPixels,
+						String.valueOf(gameLayout[i][j]).charAt(0));
+
 				if (gameLayout[i][j] > 0) {
 					this.numBlocks++;
 				}
 			}
 		}
 
-		// Initializing arrays of cells and blocks
-		cells = new Cell[gameLayout.length][gameLayout[0].length];
+		// Initializing array of blocks
 		blocks = new Block[this.numBlocks];
 
 		// Initializing arrays of cells and blocks
@@ -43,31 +56,27 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		for (int i = 0; i < gameLayout.length; i++) {
 			for (int j = 0; j < gameLayout[i].length; j++) {
 
-				// instantiating cell object for each cell in array with the properties
-				// x, y, side length, value of block over cell
-				cells[i][j] = new Cell(j * unitsToPixels, i * unitsToPixels, unitsToPixels,
-						String.valueOf(gameLayout[i][j]).charAt(0));
 
 				// instantiating block objects
 				// a 1 in tens column is horizontal block
 				if (String.valueOf(gameLayout[i][j]).charAt(0) == '1') {
 					// create new block where first digit is orientation and second is length
 					blocks[counter] = new Block(j * unitsToPixels, i * unitsToPixels,
-							gameLayout[i][j] % 10 * unitsToPixels, 1 * unitsToPixels, true, false); // eric
+							gameLayout[i][j] % 10 * unitsToPixels, 1 * unitsToPixels, true, false, cells, this); // eric
 					counter++;
 
 					// a 2 in the tens column is vertical block
 				} else if (String.valueOf(gameLayout[i][j]).charAt(0) == '2') {
 					// create new block where first digit is orientation and second is length
 					blocks[counter] = new Block(j * unitsToPixels, i * unitsToPixels, 1 * unitsToPixels,
-							gameLayout[i][j] % 10 * unitsToPixels, false, false);
+							gameLayout[i][j] % 10 * unitsToPixels, false, false, cells, this);
 					counter++;
 
 					// a 3 in the tens column is red block
 				} else if (String.valueOf(gameLayout[i][j]).charAt(0) == '3') {
 					// create new block where first digit is orientation and second is length
 					blocks[counter] = new Block(j * unitsToPixels, i * unitsToPixels,
-							gameLayout[i][j] % 10 * unitsToPixels, 1 * unitsToPixels, false, true); // eric
+							gameLayout[i][j] % 10 * unitsToPixels, 1 * unitsToPixels, false, true, cells, this); // eric
 					counter++;
 
 				}
