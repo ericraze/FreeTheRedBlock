@@ -14,16 +14,16 @@ public class Display {
 	
 	public static void main(String[] args) {
 		int[][] layout =  { 
-			{11, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 24, 0},
+			{0, 12, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0},
+			{0, 0, 33, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0},
 		};
-		int uToP = 100;
+		int unitsToPixels = 100;
 		
-		g = new Game(layout, uToP, size);
+		g = new Game(layout, unitsToPixels, size);
 		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setSize(size, size);
