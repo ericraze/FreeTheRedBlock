@@ -13,8 +13,10 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	private Cell[][] cells;
 	private Block[] blocks;
 	private int counter = 0;
-	private int dimension = 0;
+	int dimension = 0;
 	int unitsToPixels;
+	int indexBoundary;
+
 	
 	// 0 = blank, 10's = horizontal, 20's = vertical, 30 = red
 	public Game(int[][] gameLayout, int unitsToPixels) {
@@ -22,7 +24,9 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		this.unitsToPixels = unitsToPixels;
 		
 		// setting size of the game
-		dimension = gameLayout.length * unitsToPixels;
+		this.dimension = gameLayout.length * unitsToPixels;
+		
+		this.indexBoundary =  (dimension / unitsToPixels) - 1;
 		
 		setSize(dimension, dimension);
 
@@ -40,8 +44,8 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 				// instantiating cell object for each cell in array with the properties
 				// x, y, side length, value of block over cell
 				cells[j][i] = new Cell(j * unitsToPixels, i * unitsToPixels, unitsToPixels,
-						String.valueOf(gameLayout[j][i]).charAt(0));
-			//	System.out.print(String.valueOf(gameLayout[i][j]).charAt(0));//eric
+						String.valueOf(gameLayout[j][i]).charAt(0), this, i == 0, j==indexBoundary, i == indexBoundary, j == 0);
+				
 				
 				if (gameLayout[j][i] > 0) {
 					this.numBlocks++;
@@ -64,7 +68,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 				if (String.valueOf(gameLayout[j][i]).charAt(0) == '1') {
 					// create new block where first digit is orientation and second is length
 					blocks[counter] = new Block(j * unitsToPixels, i * unitsToPixels,
-							 1* unitsToPixels, gameLayout[j][i] % 10 * unitsToPixels, true, false, cells, this);
+							gameLayout[j][i] % 10 * unitsToPixels, 1 * unitsToPixels, true, false, cells, this);
 					counter++;
 
 					// a 2 in the tens column is vertical block
@@ -72,8 +76,6 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 					// create new block where first digit is orientation and second is length
 					blocks[counter] = new Block(j * unitsToPixels, i * unitsToPixels, 1 * unitsToPixels,
 							gameLayout[j][i] % 10 * unitsToPixels, false, false, cells, this);
-					System.out.println(j * unitsToPixels + " " + i * unitsToPixels);//eric
-					System.out.println(j  + " " + i );//eric
 					counter++;
 
 					// a 3 in the tens column is red block
@@ -96,12 +98,12 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 			for (int j = 0; j < cells[i].length; j++) {
 				// looping through and drawing cells
 				cells[j][i].draw(g);
-				//System.out.print( j);//eric
-				//System.out.print( j + "," + i);//eric
+				char ch = cells[j][i].getValue();//eric
+				//System.out.print(ch);//eric
 			}
-		//	System.out.println("");//eric
+			//System.out.println("");//eric
 		}
-		//System.out.println(""); //eric
+		//ystem.out.println("");//eric
 		for (int i = 0; i < blocks.length; i++) {
 			// looping through and drawing blocks
 			blocks[i].draw(g);

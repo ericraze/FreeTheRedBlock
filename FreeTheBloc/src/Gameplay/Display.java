@@ -16,7 +16,7 @@ public class Display {
 		int[][] layout =  { 
 			{0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0},
-			{22, 0, 0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 11},
 			{0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0},
@@ -26,7 +26,7 @@ public class Display {
 		g = new Game(layout, unitsToPixels);
 		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setSize(size, size);
+		f.setSize(size + 30, size + 30);
 		f.add(g);
 		f.setVisible(true);
 		
