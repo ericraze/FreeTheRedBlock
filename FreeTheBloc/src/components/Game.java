@@ -40,12 +40,14 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 				// instantiating cell object for each cell in array with the properties
 				// x, y, side length, value of block over cell
 				cells[j][i] = new Cell(j * unitsToPixels, i * unitsToPixels, unitsToPixels,
-						String.valueOf(gameLayout[i][j]).charAt(0));
-
-				if (gameLayout[i][j] > 0) {
+						String.valueOf(gameLayout[j][i]).charAt(0));
+			//	System.out.print(String.valueOf(gameLayout[i][j]).charAt(0));//eric
+				
+				if (gameLayout[j][i] > 0) {
 					this.numBlocks++;
 				}
 			}
+		//	System.out.println(""); //eric
 		}
 
 		// Initializing array of blocks
@@ -59,24 +61,26 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
 				// instantiating block objects
 				// a 1 in tens column is horizontal block
-				if (String.valueOf(gameLayout[i][j]).charAt(0) == '1') {
+				if (String.valueOf(gameLayout[j][i]).charAt(0) == '1') {
 					// create new block where first digit is orientation and second is length
 					blocks[counter] = new Block(j * unitsToPixels, i * unitsToPixels,
-							gameLayout[i][j] % 10 * unitsToPixels, 1 * unitsToPixels, true, false, cells, this); // eric
+							 1* unitsToPixels, gameLayout[j][i] % 10 * unitsToPixels, true, false, cells, this);
 					counter++;
 
 					// a 2 in the tens column is vertical block
-				} else if (String.valueOf(gameLayout[i][j]).charAt(0) == '2') {
+				} else if (String.valueOf(gameLayout[j][i]).charAt(0) == '2') {
 					// create new block where first digit is orientation and second is length
 					blocks[counter] = new Block(j * unitsToPixels, i * unitsToPixels, 1 * unitsToPixels,
-							gameLayout[i][j] % 10 * unitsToPixels, false, false, cells, this);
+							gameLayout[j][i] % 10 * unitsToPixels, false, false, cells, this);
+					System.out.println(j * unitsToPixels + " " + i * unitsToPixels);//eric
+					System.out.println(j  + " " + i );//eric
 					counter++;
 
 					// a 3 in the tens column is red block
-				} else if (String.valueOf(gameLayout[i][j]).charAt(0) == '3') {
+				} else if (String.valueOf(gameLayout[j][i]).charAt(0) == '3') {
 					// create new block where first digit is orientation and second is length
 					blocks[counter] = new Block(j * unitsToPixels, i * unitsToPixels,
-							gameLayout[i][j] % 10 * unitsToPixels, 1 * unitsToPixels, false, true, cells, this); // eric
+							gameLayout[j][i] % 10 * unitsToPixels, 1 * unitsToPixels, false, true, cells, this); 
 					counter++;
 
 				}
@@ -91,9 +95,13 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		for (int i = 0; i < cells.length; i++) {
 			for (int j = 0; j < cells[i].length; j++) {
 				// looping through and drawing cells
-				cells[i][j].draw(g);
+				cells[j][i].draw(g);
+				//System.out.print( j);//eric
+				//System.out.print( j + "," + i);//eric
 			}
+		//	System.out.println("");//eric
 		}
+		//System.out.println(""); //eric
 		for (int i = 0; i < blocks.length; i++) {
 			// looping through and drawing blocks
 			blocks[i].draw(g);

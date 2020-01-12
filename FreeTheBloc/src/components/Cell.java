@@ -27,7 +27,13 @@ public class Cell {
 		g.fillRect(x+ 10, y+ 10, dimension - 20, dimension - 20);
 	}
 	
+	public char getValue() {
+		return value;
+	}
 	
+	public void setValue(char value) {
+		this.value = value;
+	}
 	
 	
 }
