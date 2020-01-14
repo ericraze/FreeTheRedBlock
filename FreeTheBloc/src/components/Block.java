@@ -46,17 +46,32 @@ public class Block {
 	}
 
 	public void draw(Graphics g) {
+		if(!isRed) {
 		// border of block
 		g.setColor(Color.black);
 		g.drawRect(x, y, width, height);
 
 		// fill block
 		g.setColor(Color.green);
-		g.fillRect(x + 10, y + 10, width - 20, height - 20);// eric
+		g.fillRect(x + 1, y + 1, width - 2, height - 2);// eric
 		// System.out.println(x + " " + y);// eric
 		if (isStart) {
 			updateCells();
 			isStart = false;
+		}
+		} else {
+			// border of block
+			g.setColor(Color.black);
+			g.drawRect(x, y, width, height);
+
+			// fill block
+			g.setColor(Color.red);
+			g.fillRect(x + 1, y + 1, width - 2, height - 2);// eric
+			// System.out.println(x + " " + y);// eric
+			if (isStart) {
+				updateCells();
+				isStart = false;
+			}
 		}
 	}
 
@@ -243,7 +258,6 @@ public class Block {
 
 	public int[] cellOn(int x, int y) {
 		int cellX = (x / game.unitsToPixels);
-
 		int cellY = (y / game.unitsToPixels);
 		int[] cellOn = { cellX, cellY }; // eric
 		return cellOn;
@@ -277,9 +291,7 @@ public class Block {
 	public void setConstraints() {
 		if (mouseIn && isPressed) {
 			if (!isRed) {
-
 				if (isHorizontal) {
-
 					int[] checkCell = cellOn(x, y);
 					int count = 0;
 					eastConstraint = cells[checkCell[0] + widthCells - 1][checkCell[1]].getEdge('e');
@@ -292,9 +304,7 @@ public class Block {
 						if (cells[count + widthCells + checkCell[0]][checkCell[1]].getValue() == '0') {
 
 							eastConstraint = cells[count + widthCells + checkCell[0]][checkCell[1]].getEdge('e');
-
 						} else if (cells[count + widthCells + checkCell[0]][checkCell[1]].getValue() != '0') {
-
 							break;
 						}
 
@@ -310,7 +320,6 @@ public class Block {
 						if (cells[checkCell[0] - count][checkCell[1]].getValue() == '0') {
 
 							westConstraint = cells[checkCell[0] - count][checkCell[1]].getEdge('w');
-
 						} else if (cells[checkCell[0] - count][checkCell[1]].getValue() != '0') {
 
 							break;
@@ -331,11 +340,9 @@ public class Block {
 
 						// if cell being scanned is empty, southern edge of cell is constraint
 						if (cells[checkCell[0]][checkCell[1] + count + heightCells].getValue() == '0') {
-
-							southConstraint = cells[checkCell[0]][checkCell[1] + count + heightCells].getEdge('s');
-
+							
+							southConstraint = cells[checkCell[0]][checkCell[1] + count + heightCells].getEdge('s');					
 						} else if (cells[checkCell[0]][checkCell[1] + count + heightCells].getValue() != '0') {
-
 							break;
 						}
 
@@ -362,7 +369,7 @@ public class Block {
 					}
 				}
 			} else {
-				System.out.println("eric");// eric
+
 				int[] checkCell = cellOn(x, y);
 				int count = 0;
 				eastConstraint = cells[checkCell[0] + widthCells - 1][checkCell[1]].getEdge('e');

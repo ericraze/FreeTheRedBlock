@@ -1,5 +1,6 @@
 package components;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -9,25 +10,25 @@ import javax.swing.JPanel;
 
 public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
-	private int numBlocks = 0;
+	private int numBlocks;
 	private Cell[][] cells;
 	private Block[] blocks;
-	private int counter = 0;
+	private int counter;
+	private boolean isWon;
 	int dimension = 0;
 	int unitsToPixels;
 	int indexBoundary;
 
-	
 	// 0 = blank, 10's = horizontal, 20's = vertical, 30 = red
 	public Game(int[][] gameLayout, int unitsToPixels) {
 
 		this.unitsToPixels = unitsToPixels;
-		
+
 		// setting size of the game
 		this.dimension = gameLayout.length * unitsToPixels;
-		
-		this.indexBoundary =  (dimension / unitsToPixels) - 1;
-		
+
+		this.indexBoundary = (dimension / unitsToPixels) - 1;
+
 		setSize(dimension, dimension);
 
 		// adding listeners to the game
@@ -36,22 +37,22 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
 		// Initializing cell array
 		cells = new Cell[gameLayout.length][gameLayout[0].length];
-		
+
 		// Amount of blocks in game and instantiating cells
 		for (int i = 0; i < gameLayout.length; i++) {
 			for (int j = 0; j < gameLayout[i].length; j++) {
-				
+
 				// instantiating cell object for each cell in array with the properties
 				// x, y, side length, value of block over cell
 				cells[j][i] = new Cell(j * unitsToPixels, i * unitsToPixels, unitsToPixels,
-						String.valueOf(gameLayout[j][i]).charAt(0), this);
-				
-				
+						String.valueOf(gameLayout[j][i]).charAt(0), j, i, this);
+				cells[j][i].checkGate();
+
 				if (gameLayout[j][i] > 0) {
 					this.numBlocks++;
 				}
 			}
-		//	System.out.println(""); //eric
+			// System.out.println(""); //eric
 		}
 
 		// Initializing array of blocks
@@ -61,7 +62,6 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		// Looping through game layout array
 		for (int i = 0; i < gameLayout.length; i++) {
 			for (int j = 0; j < gameLayout[i].length; j++) {
-
 
 				// instantiating block objects
 				// a 1 in tens column is horizontal block
@@ -82,7 +82,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 				} else if (String.valueOf(gameLayout[j][i]).charAt(0) == '3') {
 					// create new block where first digit is orientation and second is length
 					blocks[counter] = new Block(j * unitsToPixels, i * unitsToPixels,
-							gameLayout[j][i] % 10 * unitsToPixels, 1 * unitsToPixels, false, true, cells, this); 
+							gameLayout[j][i] % 10 * unitsToPixels, 1 * unitsToPixels, false, true, cells, this);
 					counter++;
 
 				}
@@ -94,20 +94,26 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
 	// Drawing all components in game
 	public void paintComponent(Graphics g) {
-		for (int i = 0; i < cells.length; i++) {
-			for (int j = 0; j < cells[i].length; j++) {
-				// looping through and drawing cells
-				cells[j][i].draw(g);
-				char ch = cells[j][i].getValue();//eric
-				//System.out.print(ch);//eric
+		if (!isWon) {
+			for (int i = 0; i < cells.length; i++) {
+				for (int j = 0; j < cells[i].length; j++) {
+					// looping through and drawing cells
+					cells[j][i].draw(g);
+					// char ch = cells[j][i].getValue();//eric
+					// System.out.print(ch);//eric
+				}
+				// System.out.println("");//eric
 			}
-			//System.out.println("");//eric
+			// System.out.println("");//eric
+			for (int i = 0; i < blocks.length; i++) {
+				// looping through and drawing blocks
+				blocks[i].draw(g);
+			}
+		} else {
+			g.setColor(Color.ORANGE);
+			g.fillRect(0, 0, dimension, dimension);
 		}
-		//System.out.println("");//eric
-		for (int i = 0; i < blocks.length; i++) {
-			// looping through and drawing blocks
-			blocks[i].draw(g);
-		}
+
 	}
 
 	@Override
@@ -124,6 +130,14 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		for (int i = 0; i < blocks.length; i++) {
 			blocks[i].released(e);
 		}
+
+		for (int i = 0; i < cells.length; i++) {
+			for (int j = 0; j < cells[i].length; j++) {
+				isWon = cells[indexBoundary][indexBoundary / 2].getWin();
+				System.out.println(isWon);// eric
+			}
+		}
+
 		repaint();
 	}
 
@@ -160,8 +174,5 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		// TODO Auto-generated method stub
 
 	}
-	
-	
-	
 
 }
