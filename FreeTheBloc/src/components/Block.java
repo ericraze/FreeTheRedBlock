@@ -275,21 +275,18 @@ public class Block {
 
 			if (isHorizontal) {
 				int[] checkCell = cellOn(x, y);
-				int count = 1;
+				int count = 0;
 				eastConstraint = cells[checkCell[0] + widthCells - 1][checkCell[1]].getEdge('e');
-				// System.out.println(checkCell[0] + widthCells - 1);//eric
-
+				
 				// east boundary
-				while (count + checkCell[0] + widthCells - 2 < game.indexBoundary) {
-					System.out.println(checkCell[0]);
-				//	System.out.println(count + checkCell[0] + widthCells - 1);// eric
-//				System.out.println(cells[count + widthCells + checkCell[0]][checkCell[1]].getEdge('e'));//eric
-					// if cell being scanned is not empty, this cell is the constraint
-					if (cells[count + widthCells - 1 + checkCell[0]][checkCell[1]].getValue() == '0') {
+				while (count + checkCell[0] + widthCells <= game.indexBoundary) {
 
-						eastConstraint = cells[count + widthCells - 1 + checkCell[0]][checkCell[1]].getEdge('e');
+					// if cell being scanned is empty, eastern edge of cell is constraint
+					if (cells[count + widthCells + checkCell[0]][checkCell[1]].getValue() == '0') {
+
+						eastConstraint = cells[count + widthCells + checkCell[0]][checkCell[1]].getEdge('e');
 						
-					} else if (cells[count + widthCells - 1 + checkCell[0]][checkCell[1]].getValue() != '0') {
+					} else if (cells[count + widthCells + checkCell[0]][checkCell[1]].getValue() != '0') {
 						
 						break;
 					}
