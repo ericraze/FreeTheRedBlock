@@ -1,4 +1,4 @@
-package Gameplay;
+package gameplay;
 
 import javax.swing.JFrame;
 
@@ -14,12 +14,12 @@ public class Display {
 	
 	public static void main(String[] args) {
 		int[][] layout =  { 
+			{0, 22, 0, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0},
+			{0, 0, 22, 0, 0, 12},
+			{0, 0, 32, 0, 0, 0},
 			{0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 12},
-			{0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 0, 0},
-			{0, 0, 0, 0, 22, 0},
+			{24, 0, 0, 0, 0, 0},
 		};
 		int unitsToPixels = 100;
 		

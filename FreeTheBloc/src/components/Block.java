@@ -75,12 +75,17 @@ public class Block {
 					} // eric
 
 				} else if (!isHorizontal) {
-					// if vertical, follow mouse y movement
-					y = e.getY() - yOffset;
+					if(e.getY() - yOffset + height <= southConstraint && e.getY() - yOffset >= northConstraint) {
+						y = e.getY() - yOffset;
+					}
+					
 				}
 			} else {
 				// if red, follow mouse x movement
-				x = e.getX() - xOffset;
+				if (e.getX() - xOffset + width <= eastConstraint && e.getX() - xOffset >= westConstraint) {// eric
+
+					x = e.getX() - xOffset;
+				} // eric
 			}
 
 		}
@@ -91,7 +96,6 @@ public class Block {
 		// calculate constraints
 		mouseOver(e);
 		setConstraints();
-		
 
 		initialPosition = cellOn(x, y);
 
@@ -272,15 +276,97 @@ public class Block {
 
 	public void setConstraints() {
 		if (mouseIn && isPressed) {
+			if (!isRed) {
 
-			if (isHorizontal) {
-				
-				System.out.println("eric");//eric
+				if (isHorizontal) {
+
+					int[] checkCell = cellOn(x, y);
+					int count = 0;
+					eastConstraint = cells[checkCell[0] + widthCells - 1][checkCell[1]].getEdge('e');
+					westConstraint = cells[checkCell[0]][checkCell[1]].getEdge('w');
+
+					// east boundary
+					while (count + checkCell[0] + widthCells <= game.indexBoundary) {
+
+						// if cell being scanned is empty, eastern edge of cell is constraint
+						if (cells[count + widthCells + checkCell[0]][checkCell[1]].getValue() == '0') {
+
+							eastConstraint = cells[count + widthCells + checkCell[0]][checkCell[1]].getEdge('e');
+
+						} else if (cells[count + widthCells + checkCell[0]][checkCell[1]].getValue() != '0') {
+
+							break;
+						}
+
+						count++;
+
+					}
+
+					count = 1;
+					// west Boundary
+					while (checkCell[0] - count >= 0) {
+
+						// if cell being scanned is empty, eastern edge of cell is constraint
+						if (cells[checkCell[0] - count][checkCell[1]].getValue() == '0') {
+
+							westConstraint = cells[checkCell[0] - count][checkCell[1]].getEdge('w');
+
+						} else if (cells[checkCell[0] - count][checkCell[1]].getValue() != '0') {
+
+							break;
+						}
+
+						count++;
+
+					}
+
+				} else if (!isHorizontal) {
+					int[] checkCell = cellOn(x, y);
+					int count = 0;
+					northConstraint = cells[checkCell[0]][checkCell[1]].getEdge('n');
+					southConstraint = cells[checkCell[0]][checkCell[1] + heightCells - 1].getEdge('s');
+
+					// south boundary
+					while (count + checkCell[1] + heightCells <= game.indexBoundary) {
+
+						// if cell being scanned is empty, southern edge of cell is constraint
+						if (cells[checkCell[0]][checkCell[1] + count + heightCells].getValue() == '0') {
+
+							southConstraint = cells[checkCell[0]][checkCell[1] + count + heightCells].getEdge('s');
+
+						} else if (cells[checkCell[0]][checkCell[1] + count + heightCells].getValue() != '0') {
+
+							break;
+						}
+
+						count++;
+
+					}
+
+					count = 1;
+					
+					// north Boundary
+					while (checkCell[1] - count >= 0) {
+
+						// if cell being scanned is empty, eastern edge of cell is constraint
+						if (cells[checkCell[0]][checkCell[1] - count].getValue() == '0') {
+
+							northConstraint = cells[checkCell[0]][checkCell[1] - count].getEdge('n');
+
+						} else if (cells[checkCell[0]][checkCell[1] - count].getValue() != '0') {
+
+							break;
+						}
+
+						count++;
+					}
+				}
+			} else {
+				System.out.println("eric");// eric
 				int[] checkCell = cellOn(x, y);
 				int count = 0;
 				eastConstraint = cells[checkCell[0] + widthCells - 1][checkCell[1]].getEdge('e');
 				westConstraint = cells[checkCell[0]][checkCell[1]].getEdge('w');
-
 
 				// east boundary
 				while (count + checkCell[0] + widthCells <= game.indexBoundary) {
@@ -289,16 +375,16 @@ public class Block {
 					if (cells[count + widthCells + checkCell[0]][checkCell[1]].getValue() == '0') {
 
 						eastConstraint = cells[count + widthCells + checkCell[0]][checkCell[1]].getEdge('e');
-						
+
 					} else if (cells[count + widthCells + checkCell[0]][checkCell[1]].getValue() != '0') {
-						
+
 						break;
 					}
-					
+
 					count++;
-					
+
 				}
-				
+
 				count = 1;
 				// west Boundary
 				while (checkCell[0] - count >= 0) {
@@ -307,66 +393,17 @@ public class Block {
 					if (cells[checkCell[0] - count][checkCell[1]].getValue() == '0') {
 
 						westConstraint = cells[checkCell[0] - count][checkCell[1]].getEdge('w');
-						
+
 					} else if (cells[checkCell[0] - count][checkCell[1]].getValue() != '0') {
-						
+
 						break;
 					}
-					
+
 					count++;
-					
-				}
-				
-				
 
-			} if(isRed) {
-				System.out.println("alex");//eric
-				int[] checkCell = cellOn(x, y);
-				int count = 0;
-				eastConstraint = cells[checkCell[0] + widthCells - 1][checkCell[1]].getEdge('e');
-				westConstraint = cells[checkCell[0]][checkCell[1]].getEdge('w');
-
-
-				// east boundary
-				while (count + checkCell[0] + widthCells <= game.indexBoundary) {
-
-					// if cell being scanned is empty, eastern edge of cell is constraint
-					if (cells[count + widthCells + checkCell[0]][checkCell[1]].getValue() == '0') {
-
-						eastConstraint = cells[count + widthCells + checkCell[0]][checkCell[1]].getEdge('e');
-						
-					} else if (cells[count + widthCells + checkCell[0]][checkCell[1]].getValue() != '0') {
-						
-						break;
-					}
-					
-					count++;
-					
-				}
-				
-				count = 1;
-				// west Boundary
-				while (checkCell[0] - count >= 0) {
-
-					// if cell being scanned is empty, eastern edge of cell is constraint
-					if (cells[checkCell[0] - count][checkCell[1]].getValue() == '0') {
-
-						westConstraint = cells[checkCell[0] - count][checkCell[1]].getEdge('w');
-						
-					} else if (cells[checkCell[0] - count][checkCell[1]].getValue() != '0') {
-						
-						break;
-					}
-					
-					count++;
-					
 				}
 			}
-			
 
-			
-			
-			
 		}
 	}
 
