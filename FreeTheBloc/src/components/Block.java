@@ -17,6 +17,8 @@ public class Block {
 	private boolean isMoved;
 	private boolean isStart;
 	private int[] initialPosition; // initial position of block in array
+	private int eastConstraint, westConstraint, northConstraint, southConstraint;
+	private int widthCells, heightCells;
 
 	public Block(int x, int y, int width, int height, boolean isHorizontal, boolean isRed, Cell[][] cells, Game game) {
 		this.x = x;
@@ -28,6 +30,8 @@ public class Block {
 		this.cells = cells;
 		this.game = game;
 
+		this.widthCells = width / game.unitsToPixels;
+		this.heightCells = height / game.unitsToPixels;
 		this.isPressed = false;
 		this.xOffset = 0;
 		this.yOffset = 0;
@@ -35,6 +39,10 @@ public class Block {
 		this.isMoved = false;
 		this.isStart = true;
 		this.initialPosition = new int[] { x / game.unitsToPixels, y / game.unitsToPixels };
+		this.eastConstraint = x;
+		this.westConstraint = x;
+		this.northConstraint = y;
+		this.southConstraint = y;
 	}
 
 	public void draw(Graphics g) {
@@ -53,7 +61,6 @@ public class Block {
 	}
 
 	public void moved(MouseEvent e) {
-		boolean canMove = false;
 		mouseOver(e);
 
 		// if block is pressed, make the block follow the mouse
@@ -61,19 +68,12 @@ public class Block {
 			isMoved = true;
 			if (!isRed) {
 				if (isHorizontal) {
-					if (e.getX() - xOffset > x) {
-						
-						canMove = nextCell('e');
 
-					} else if (e.getX() - xOffset < x) {
-						//System.out.println("------------------------");//eric
-						canMove = nextCell('w');
+					if (e.getX() - xOffset + width <= eastConstraint && e.getX() - xOffset >= 0) {// eric
 
-					}
-
-					if (canMove) {// eric
 						x = e.getX() - xOffset;
 					} // eric
+
 				} else if (!isHorizontal) {
 					// if vertical, follow mouse y movement
 					y = e.getY() - yOffset;
@@ -88,12 +88,17 @@ public class Block {
 
 	public void pressed(MouseEvent e) {
 		isPressed = true;
+		// calculate constraints
+		mouseOver(e);
+		setConstraints();
+		
 
 		initialPosition = cellOn(x, y);
 
 		// saving the offsets for smooth movement
 		xOffset = e.getX() - x;
 		yOffset = e.getY() - y;
+
 	}
 
 	public void released(MouseEvent e) {
@@ -107,7 +112,8 @@ public class Block {
 		// resetting the offsets
 		xOffset = 0;
 		yOffset = 0;
-
+		eastConstraint = 0;
+		westConstraint = 0;
 	}
 
 	public void snapTo(MouseEvent e) {
@@ -234,11 +240,8 @@ public class Block {
 	public int[] cellOn(int x, int y) {
 		int cellX = (x / game.unitsToPixels);
 
-		
 		int cellY = (y / game.unitsToPixels);
 		int[] cellOn = { cellX, cellY }; // eric
-		System.out.println(cellX);//eric
-		//System.out.println(cellY);//eric
 		return cellOn;
 	}
 
@@ -267,38 +270,36 @@ public class Block {
 		}
 	}
 
-	public boolean nextCell(char direction) {
-		int[] thisCell = new int[2];
-		
-		//int[] nextCell = thisCell;
-		char ch = 'q';
-		
-		switch (direction) {
-		case 'n':
-			if(thisCell[1] == 0) {
-				return false;
-			}
-			
-			break;
-		case 's':
-			if(thisCell[1] == game.indexBoundary) {
-				
-			}
-			
-			break;
-		case 'w':
-			
-			//thisCell = cellOn(x + game.unitsToPixels, y);
-			//if(cells[thisCell[0]][thisCell[1]].wBorder == true) return false;
-			break;
-		case 'e':
-			thisCell = cellOn(x + width, y);
-			if(cells[thisCell[0]][thisCell[1]].eBorder == true) return false;
+	public void setConstraints() {
+		if (mouseIn && isPressed) {
 
-			break;
+			if (isHorizontal) {
+				int[] checkCell = cellOn(x, y);
+				int count = 1;
+				eastConstraint = cells[checkCell[0] + widthCells - 1][checkCell[1]].getEdge('e');
+				// System.out.println(checkCell[0] + widthCells - 1);//eric
+
+				// east boundary
+				while (count + checkCell[0] + widthCells - 2 < game.indexBoundary) {
+					System.out.println(checkCell[0]);
+				//	System.out.println(count + checkCell[0] + widthCells - 1);// eric
+//				System.out.println(cells[count + widthCells + checkCell[0]][checkCell[1]].getEdge('e'));//eric
+					// if cell being scanned is not empty, this cell is the constraint
+					if (cells[count + widthCells - 1 + checkCell[0]][checkCell[1]].getValue() == '0') {
+
+						eastConstraint = cells[count + widthCells - 1 + checkCell[0]][checkCell[1]].getEdge('e');
+						
+					} else if (cells[count + widthCells - 1 + checkCell[0]][checkCell[1]].getValue() != '0') {
+						
+						break;
+					}
+					
+					count++;
+					
+				}
+
+			}
 		}
-		
-		return true;
 	}
 
 }

@@ -44,7 +44,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 				// instantiating cell object for each cell in array with the properties
 				// x, y, side length, value of block over cell
 				cells[j][i] = new Cell(j * unitsToPixels, i * unitsToPixels, unitsToPixels,
-						String.valueOf(gameLayout[j][i]).charAt(0), this, i == 0, j==indexBoundary, i == indexBoundary, j == 0);
+						String.valueOf(gameLayout[j][i]).charAt(0), this);
 				
 				
 				if (gameLayout[j][i] > 0) {
@@ -103,7 +103,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 			}
 			//System.out.println("");//eric
 		}
-		//ystem.out.println("");//eric
+		//System.out.println("");//eric
 		for (int i = 0; i < blocks.length; i++) {
 			// looping through and drawing blocks
 			blocks[i].draw(g);
@@ -160,5 +160,8 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		// TODO Auto-generated method stub
 
 	}
+	
+	
+	
 
 }

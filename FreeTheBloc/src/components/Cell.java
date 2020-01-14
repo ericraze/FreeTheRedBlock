@@ -9,17 +9,20 @@ public class Cell {
 	private int x, y, dimension; // x and y positions and the length of each dimension
 	private char value; // the content of a cell
 	boolean nBorder, eBorder, sBorder, wBorder;
+	private int nEdge, eEdge, sEdge, wEdge;
 	
 	// value - 0 = blank, 1 = horizontal, 2 = vertical, 3 = red
-	public Cell(int x, int y, int dimension, char value, Game game, boolean nBorder, boolean eBorder, boolean sBorder,boolean wBorder ) {
+	public Cell(int x, int y, int dimension, char value, Game game) {
 		this.x = x;
 		this.y = y;
 		this.dimension = dimension;
 		this.value = value;
-		this.nBorder = nBorder;
-		this.eBorder = eBorder;
-		this.sBorder = sBorder;
-		this.wBorder = wBorder;
+		this.nEdge = 0;
+		this.eEdge = 0;
+		this.sEdge = 0;
+		this.wEdge = 0;
+		setBorders();
+		
 	}
 	
 	public void draw(Graphics g) {
@@ -38,6 +41,28 @@ public class Cell {
 	
 	public void setValue(char value) {
 		this.value = value;
+	}
+	
+	public void setBorders() {
+		nEdge = y;
+		eEdge = x + dimension;
+		sEdge = y + dimension;
+		wEdge = x;
+	}
+	
+	public int getEdge(char direction) {
+		switch(direction) {
+		case 'n':
+			return nEdge;
+		case 'e':
+			return eEdge;
+		case 's':
+			return sEdge;
+		case 'w':
+			return wEdge;
+		default:
+			return -1;
+		}
 	}
 	
 }
