@@ -1,6 +1,7 @@
 package components;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -15,7 +16,8 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	private Block[] blocks; // array of blocks in game
 	private int counter; // counter
 	private boolean isWon; // is game won
-	int dimension = 0; // length of a single unit in game in pixels
+	int numMoves; // Number of moves made
+	int dimension; // length of a single unit in game in pixels
 	int unitsToPixels; // amount of pixels in a unit
 	int indexBoundary; // width and height of game in cells
 
@@ -41,7 +43,9 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		// setting size of the game
 		this.dimension = gameLayout.length * unitsToPixels;
 		this.indexBoundary = (dimension / unitsToPixels) - 1;
-
+		this.numMoves = 0;
+		
+		
 		// Setting size of JPanel the block will be displayed in
 		setSize(dimension, dimension);
 
@@ -112,6 +116,10 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	 * Used to paint the game
 	 */
 	public void paintComponent(Graphics g) {
+		//Clearing then setting background
+		g.clearRect(0, 0, dimension + 100, dimension + 100);
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(0, 0, getWidth(), getHeight());
 		if (!isWon) { //if game is not won
 			for (int i = 0; i < cells.length; i++) {
 				for (int j = 0; j < cells[i].length; j++) {
@@ -130,6 +138,15 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 			g.fillRect(0, 0, dimension, dimension);
 		}
 
+		//drawing score
+		g.setColor(Color.MAGENTA);
+		String movesMessage = "Moves: "+numMoves;
+		int fontSize = 90 / movesMessage.length();
+		Font font = new Font("Monospaced", Font.BOLD, fontSize + 5);
+		g.setFont(font);
+		
+		g.drawString(movesMessage, unitsToPixels * cells.length + 5 , dimension / 2 + 50);
+		
 	}
 
 	/**
@@ -140,6 +157,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		for (int i = 0; i < blocks.length; i++) {
 			blocks[i].pressed(e);
 		}
+		System.out.println("eric");//eric
 
 	}
 

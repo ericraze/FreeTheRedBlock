@@ -40,9 +40,7 @@ public class Display {
 		this.layout = layout;
 		this.unitsToPixels = gameSize / layout[0].length;
 		this.game = new Game(layout, unitsToPixels);
-		System.out.println(unitsToPixels);//eric
 
-		
 		containerPanel.setLayout(cl);
 		
 		//containerPanel.setSize(size,size);

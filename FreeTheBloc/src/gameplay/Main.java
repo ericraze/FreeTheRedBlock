@@ -4,8 +4,6 @@ package gameplay;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import components.Game;
-
 public class Main {
 	
 	static int size = 600;

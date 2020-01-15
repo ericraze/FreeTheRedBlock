@@ -106,7 +106,7 @@ public class Block {
 			if (!isRed) {
 				if (isHorizontal) {
 					// is the desired location within bounds
-					if (e.getX() - xOffset + width <= eastConstraint && e.getX() - xOffset >= westConstraint) {// eric
+					if (e.getX() - xOffset + width <= eastConstraint && e.getX() - xOffset >= westConstraint) {
 						// changing position of block
 						x = e.getX() - xOffset;
 					}
@@ -121,7 +121,7 @@ public class Block {
 
 			} else { // Is red
 				// is the desired location within bounds
-				if (e.getX() - xOffset + width <= eastConstraint && e.getX() - xOffset >= westConstraint) {// eric
+				if (e.getX() - xOffset + width <= eastConstraint && e.getX() - xOffset >= westConstraint) {
 					// changing position of block
 					x = e.getX() - xOffset;
 				}
@@ -165,6 +165,7 @@ public class Block {
 			// adjust block to proper position and update cell values
 			snapTo();
 			updateCells();
+			game.numMoves++;
 			isMoved = false;
 		}
 
