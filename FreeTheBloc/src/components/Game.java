@@ -10,15 +10,29 @@ import javax.swing.JPanel;
 
 public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
-	private int numBlocks;
-	private Cell[][] cells;
-	private Block[] blocks;
-	private int counter;
-	private boolean isWon;
-	int dimension = 0;
-	int unitsToPixels;
-	int indexBoundary;
+	private int numBlocks; // number of blocks in game
+	private Cell[][] cells; // array of cells in game
+	private Block[] blocks; // array of blocks in game
+	private int counter; // counter
+	private boolean isWon; // is game won
+	int dimension = 0; // length of a single unit in game in pixels
+	int unitsToPixels; // amount of pixels in a unit
+	int indexBoundary; // width and height of game in cells
 
+	/**
+	 * Game Constructor Used to create new games
+	 * 
+	 * @param gameLayout    a 2D array of the game - There are flag values scattered
+	 *                      through this array that correspond to blocks. A non-zero
+	 *                      number signifies that a block's top left corner is in
+	 *                      the top left corner of that array index. The first digit
+	 *                      of a non-zero number denotes the block's orientation (1
+	 *                      = horizontal, 2 = vertical, 3 = red). The second digit
+	 *                      represents it's cell length/width
+	 * 
+	 * @param unitsToPixels the amount of pixels per index in the array - this
+	 *                      controls the size of cells and blocks
+	 */
 	// 0 = blank, 10's = horizontal, 20's = vertical, 30 = red
 	public Game(int[][] gameLayout, int unitsToPixels) {
 
@@ -26,9 +40,9 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
 		// setting size of the game
 		this.dimension = gameLayout.length * unitsToPixels;
-
 		this.indexBoundary = (dimension / unitsToPixels) - 1;
 
+		// Setting size of JPanel the block will be displayed in
 		setSize(dimension, dimension);
 
 		// adding listeners to the game
@@ -38,7 +52,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		// Initializing cell array
 		cells = new Cell[gameLayout.length][gameLayout[0].length];
 
-		// Amount of blocks in game and instantiating cells
+		// Recording the amount of blocks in game and instantiating cells
 		for (int i = 0; i < gameLayout.length; i++) {
 			for (int j = 0; j < gameLayout[i].length; j++) {
 
@@ -46,13 +60,15 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 				// x, y, side length, value of block over cell
 				cells[j][i] = new Cell(j * unitsToPixels, i * unitsToPixels, unitsToPixels,
 						String.valueOf(gameLayout[j][i]).charAt(0), j, i, this);
+				// checking whether this cell is the gate cell
 				cells[j][i].checkGate();
 
+				// if this index's value is nonzero it represents a block
 				if (gameLayout[j][i] > 0) {
 					this.numBlocks++;
 				}
 			}
-			// System.out.println(""); //eric
+
 		}
 
 		// Initializing array of blocks
@@ -92,30 +108,33 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
 	}
 
-	// Drawing all components in game
+	/**
+	 * Used to paint the game
+	 */
 	public void paintComponent(Graphics g) {
-		if (!isWon) {
+		if (!isWon) { //if game is not won
 			for (int i = 0; i < cells.length; i++) {
 				for (int j = 0; j < cells[i].length; j++) {
 					// looping through and drawing cells
 					cells[j][i].draw(g);
-					// char ch = cells[j][i].getValue();//eric
-					// System.out.print(ch);//eric
 				}
-				// System.out.println("");//eric
 			}
-			// System.out.println("");//eric
+
 			for (int i = 0; i < blocks.length; i++) {
 				// looping through and drawing blocks
 				blocks[i].draw(g);
 			}
 		} else {
+			//If game is won
 			g.setColor(Color.ORANGE);
 			g.fillRect(0, 0, dimension, dimension);
 		}
 
 	}
 
+	/**
+	 * Used to handle mouse presses
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		for (int i = 0; i < blocks.length; i++) {
@@ -124,26 +143,30 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
 	}
 
+	/**
+	 * Used to handle mouse release
+	 */
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 		for (int i = 0; i < blocks.length; i++) {
 			blocks[i].released(e);
 		}
 
+		//Checking to see if game is won
 		for (int i = 0; i < cells.length; i++) {
 			for (int j = 0; j < cells[i].length; j++) {
 				isWon = cells[indexBoundary][indexBoundary / 2].getWin();
-				System.out.println(isWon);// eric
 			}
 		}
 
 		repaint();
 	}
 
+	/**
+	 * Used to handle mouse movement
+	 */
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
 		for (int i = 0; i < blocks.length; i++) {
 			blocks[i].moved(e);
 		}
@@ -151,6 +174,12 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
 	}
 
+	
+	
+	
+	
+	
+	
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
