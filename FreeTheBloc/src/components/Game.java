@@ -20,6 +20,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	int dimension; // length of a single unit in game in pixels
 	int unitsToPixels; // amount of pixels in a unit
 	int indexBoundary; // width and height of game in cells
+	private int redY; //Y Value of the red Block
 
 	/**
 	 * Game Constructor Used to create new games
@@ -104,6 +105,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 					blocks[counter] = new Block(j * unitsToPixels, i * unitsToPixels,
 							gameLayout[j][i] % 10 * unitsToPixels, 1 * unitsToPixels, false, true, cells, this);
 					counter++;
+					redY = (i + 1) * unitsToPixels - (unitsToPixels /4);
 
 				}
 
@@ -147,6 +149,12 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		
 		g.drawString(movesMessage, unitsToPixels * cells.length + 5 , dimension / 2 + 50);
 		
+		g.setColor(Color.orange);
+		font = new Font("Monospaced", Font.BOLD, 75);
+		g.setFont(font);
+		g.drawString("\u21c9", unitsToPixels * cells.length + 5, redY);
+		
+		
 	}
 
 	/**
@@ -157,8 +165,6 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		for (int i = 0; i < blocks.length; i++) {
 			blocks[i].pressed(e);
 		}
-		System.out.println("eric");//eric
-
 	}
 
 	/**

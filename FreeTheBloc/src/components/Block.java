@@ -20,6 +20,7 @@ public class Block {
 	private int eastConstraint, westConstraint, northConstraint, southConstraint; // Block movement constraints
 	private int widthCells, heightCells; // width and height of block in cells
 
+
 	/**
 	 * Block constructor
 	 * 
@@ -256,7 +257,7 @@ public class Block {
 
 			// removing cells
 			for (int i = 0; i < width / game.unitsToPixels; i++) {
-
+				System.out.println(width);//eric
 				// Setting initial position to blank
 				cells[initialPosition[0] + i][initialPosition[1]].setValue('0');
 			}
