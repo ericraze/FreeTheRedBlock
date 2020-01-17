@@ -21,6 +21,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	int unitsToPixels; // amount of pixels in a unit
 	int indexBoundary; // width and height of game in cells
 	private int redY; //Y Value of the red Block
+	private int perfectScore; // Best score user can achieve
 
 	/**
 	 * Game Constructor Used to create new games
@@ -37,10 +38,11 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	 *                      controls the size of cells and blocks
 	 */
 	// 0 = blank, 10's = horizontal, 20's = vertical, 30 = red
-	public Game(int[][] gameLayout, int unitsToPixels) {
+	public Game(int[][] gameLayout, int unitsToPixels, int perfectScore) {
 
 		this.unitsToPixels = unitsToPixels;
-
+		this.perfectScore = perfectScore;
+		
 		// setting size of the game
 		this.dimension = gameLayout.length * unitsToPixels;
 		this.indexBoundary = (dimension / unitsToPixels) - 1;
@@ -146,9 +148,16 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		int fontSize = 90 / movesMessage.length();
 		Font font = new Font("Monospaced", Font.BOLD, fontSize + 5);
 		g.setFont(font);
-		
 		g.drawString(movesMessage, unitsToPixels * cells.length + 5 , dimension / 2 + 50);
 		
+		g.setColor(Color.RED);
+		font = new Font("Monospaced", Font.ITALIC, fontSize + 5);
+		g.setFont(font);
+		g.drawString("Perfect", unitsToPixels * cells.length + 5, redY - 150);
+		g.drawString("Score:", unitsToPixels * cells.length + 5, redY - 125);
+		g.drawString(String.valueOf(perfectScore), unitsToPixels * cells.length + 5, redY - 100);
+		
+		//Drawing arrows
 		g.setColor(Color.orange);
 		font = new Font("Monospaced", Font.BOLD, 75);
 		g.setFont(font);

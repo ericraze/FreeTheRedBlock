@@ -166,10 +166,17 @@ public class Block {
 			// adjust block to proper position and update cell values
 			snapTo();
 			updateCells();
-			game.numMoves++;
 			isMoved = false;
-		}
+			
+			//Increase moves
+			int[] newBlockPos = cellOn(x,y);
 
+			if(Math.abs(newBlockPos[0] - initialPosition[0]) >= 1 || Math.abs(newBlockPos[1] - initialPosition[1]) >= 1) {
+				game.numMoves++;
+			}
+			
+			
+		}
 		// resetting the offsets
 		xOffset = 0;
 		yOffset = 0;

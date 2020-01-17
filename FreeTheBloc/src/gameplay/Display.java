@@ -20,6 +20,7 @@ public class Display {
 	int unitsToPixels;
 	int size, gameSize;
 	int[][] layout;
+	int perfectScore;
 
 	JFrame f = new JFrame("Free The Block");
 	JPanel containerPanel = new JPanel();
@@ -40,13 +41,14 @@ public class Display {
 
 	public Display(int size) {
 		
-		Level level = new Level(1);
+		Level level = new Level(2);
 		
+		this.perfectScore = level.perfectScore;
 		this.size = size;
 		this.gameSize = size - 100;
 		this.layout = level.layout;
 		this.unitsToPixels = gameSize / this.layout[0].length;
-		this.game = new Game(layout, unitsToPixels);
+		this.game = new Game(layout, unitsToPixels, perfectScore);
 
 		namePanel();
 		menuPanel();
@@ -150,12 +152,15 @@ public class Display {
 		instructionsPanel.setLayout(new BorderLayout());
 
 		String sInstructions =  "<html>Free The Red Block<br>An Intuitive Puzzle Game<br><br>A puzzle is solved when the red block is "
-				+ "located above the gate, a yellow square. <br>However, there will be other blocks that obstruct the red block's path.<br>"
+				+ "located above the gate, a yellow square.<br>"
+				+ "The gate is always on the rightmost side of the puzzle, across from the red block. "
+				+ "The direction<br>in which to slide the red block is shown by the double arrows located to the right of the puzzle<br>"
+				+ "However, there will be other blocks that obstruct the red block's path.<br>"
 				+ "To rearrange any block you must click on, then drag the block you wish to move.<br>"
 				+ "Horizontal blocks may only be dragged along their X-axis.<br>"
 				+ "Vertical blocks can only slide on their Y-axis.<br>"
 				+ "Blocks cannot move through each other or the boundaries of the puzzle.<br>"
-				+ "Try to beat the level using the fewest moves possible!<br><br>"
+				+ "Try to solve each puzzle using the fewest moves possible!<br><br>"
 				+ "GOOD LUCK</html>";
 
 		JLabel instructions = new JLabel();
