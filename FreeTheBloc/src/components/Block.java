@@ -3,7 +3,6 @@ package components;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Line2D;
 
 public class Block {
 
@@ -71,18 +70,18 @@ public class Block {
 			g.drawRect(x, y, width, height);
 
 			// fill block
-			g.setColor(new Color(0, 204, 0));
+			g.setColor(new Color(77,77,255));
 			g.fillRect(x + 1, y + 1, width - 2, height - 2);
 
-			// Making bevels to appear 3D
-			for (int i = 0; i < game.unitsToPixels / 12; i++) {
+			// Making bevels appear 3D
+			for (int i = 0; i < game.unitsToPixels / 15; i++) {
 				//Bottom and right bevels
-				g.setColor(new Color(0, 179, 0));
+				g.setColor(new Color(52,52,255));
 				g.drawLine(x + i, y + height - i, x + width - 2, y + height - i);
 				g.drawLine(x + width - 2 - i, y + i, x + width - 2 - i, y + height);
 
 				//Top and left bevels
-				g.setColor(new Color(0, 230, 0));
+				g.setColor(new Color(103,103,255));
 				g.drawLine(x + 1, y + i, x + width - 2 - i, y + i);
 				g.drawLine(x + 1 + i, y, x + i, y + height - i);
 			}
@@ -100,8 +99,8 @@ public class Block {
 			g.setColor(new Color(204, 0, 0));
 			g.fillRect(x + 1, y + 1, width - 2, height - 2);
 
-			// Making bevels to appear 3D
-			for (int i = 0; i < game.unitsToPixels / 12; i++) {
+			// Making bevels appear 3D
+			for (int i = 0; i < game.unitsToPixels / 15; i++) {
 				// Bottom and right bevels
 				g.setColor(new Color(179,0,0));
 				g.drawLine(x + i, y + height - i, x + width - 2, y + height - i);

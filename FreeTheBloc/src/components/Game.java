@@ -1,12 +1,18 @@
 package components;
 
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class Game extends JPanel implements MouseListener, MouseMotionListener {
@@ -22,26 +28,39 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	int indexBoundary; // width and height of game in cells
 	private int redY; // Y Value of the red Block
 	private int perfectScore; // Best score user can achieve
+	private CardLayout cardLayout; // Cardlayout used in display
+	private JPanel container; // Container Panel used in card layout
 
 	/**
 	 * Game Constructor Used to create new games
 	 * 
-	 * @param gameLayout    a 2D array of the game - There are flag values scattered
-	 *                      through this array that correspond to blocks. A non-zero
-	 *                      number signifies that a block's top left corner is in
-	 *                      the top left corner of that array index. The first digit
-	 *                      of a non-zero number denotes the block's orientation (1
-	 *                      = horizontal, 2 = vertical, 3 = red). The second digit
-	 *                      represents it's cell length/width
+	 * @param gameLayout     a 2D array of the game - There are flag values
+	 *                       scattered through this array that correspond to blocks.
+	 *                       A non-zero number signifies that a block's top left
+	 *                       corner is in the top left corner of that array index.
+	 *                       The first digit of a non-zero number denotes the
+	 *                       block's orientation (1 = horizontal, 2 = vertical, 3 =
+	 *                       red). The second digit represents it's cell
+	 *                       length/width
 	 * 
-	 * @param unitsToPixels the amount of pixels per index in the array - this
-	 *                      controls the size of cells and blocks
+	 * @param unitsToPixels  the amount of pixels per index in the array - this
+	 *                       controls the size of cells and blocks
+	 * 
+	 * @param perfectScore   the best possible score for this game
+	 *
+	 * @param cl             the cardLayout used in this game
+	 *
+	 * @param containerPanel the containerPanel used in the cardLayout
 	 */
 	// 0 = blank, 10's = horizontal, 20's = vertical, 30 = red
-	public Game(int[][] gameLayout, int unitsToPixels, int perfectScore) {
+	public Game(int[][] gameLayout, int unitsToPixels, int perfectScore, CardLayout cl, JPanel containerPanel) {
 
+		setLayout(new BorderLayout());
+		
 		this.unitsToPixels = unitsToPixels;
 		this.perfectScore = perfectScore;
+		this.cardLayout = cl;
+		this.container = containerPanel;
 
 		// setting size of the game
 		this.dimension = gameLayout.length * unitsToPixels;
@@ -113,12 +132,33 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 			}
 		}
 
+		setSize(dimension, dimension );
+
+
+		
+		
+		// Adding button to return to main menu
+		JButton mainMenuButton = new JButton("Main Menu");
+		mainMenuButton.setPreferredSize(new Dimension(dimension, 25));
+
+		add(mainMenuButton, BorderLayout.SOUTH);
+
+		
+		mainMenuButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				// show instructions screen
+				cardLayout.show(container, "m");
+			}
+		});
+
 	}
 
 	/**
 	 * Used to paint the game
 	 */
 	public void paintComponent(Graphics g) {
+
 		// Clearing then setting background
 		g.clearRect(0, 0, dimension + 100, dimension + 100);
 		g.setColor(Color.DARK_GRAY);
@@ -141,7 +181,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 			g.fillRect(0, 0, dimension, dimension);
 		}
 
-		// drawing score
+		// drawing scores
 		g.setColor(Color.MAGENTA);
 		String movesMessage = "Moves: " + numMoves;
 		int fontSize = 90 / movesMessage.length();
@@ -152,9 +192,9 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		g.setColor(Color.RED);
 		font = new Font("Monospaced", Font.ITALIC, fontSize + 5);
 		g.setFont(font);
-		g.drawString("Perfect", unitsToPixels * cells.length + 5, redY - 150);
-		g.drawString("Score:", unitsToPixels * cells.length + 5, redY - 125);
-		g.drawString(String.valueOf(perfectScore), unitsToPixels * cells.length + 5, redY - 100);
+		g.drawString("Perfect", unitsToPixels * cells.length + 5, 50);
+		g.drawString("Score:", unitsToPixels * cells.length + 5, 75);
+		g.drawString(String.valueOf(perfectScore), unitsToPixels * cells.length + 5, 100);
 
 		// Drawing arrows
 		g.setColor(Color.orange);

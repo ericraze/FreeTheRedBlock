@@ -56,17 +56,42 @@ public class Cell {
 			g.setColor(Color.black);
 			g.drawRect(x, y, dimension, dimension);
 
-			// fill cell brown
-			g.setColor(new Color(139, 69, 19));
+			// fill cell
+			g.setColor(new Color(230,230,230));
 			g.fillRect(x + 1, y + 1, dimension - 2, dimension - 2);
+			
+			//Making the cells appear 3D
+			for (int i = 0; i < dimension / 20; i++) {
+				//Bottom and right bevels
+				g.setColor(new Color(217,217,217));
+				g.drawLine(x + i, y + dimension - i, x + dimension, y + dimension - i);
+				g.drawLine(x + dimension - 2 - i, y + i, x + dimension - 2 - i, y + dimension);
+
+				//Top and left bevels
+				g.setColor(new Color(242,242,242));
+				g.drawLine(x + 1, y + i, x + dimension - 2 - i, y + i);
+				g.drawLine(x + 1 + i, y, x + i, y + dimension - i);
+			}
 
 		} else { // winning cell
 			g.setColor(Color.black);
 			g.drawRect(x, y, dimension, dimension);
 
 			// fill cell orange
-			g.setColor(Color.orange);
+			g.setColor(new Color(244,122,0));
 			g.fillRect(x + 1, y + 1, dimension - 2, dimension - 2);
+			
+			for (int i = 0; i < dimension / 20; i++) {
+				//Bottom and right bevels
+				g.setColor(new Color(218,109,0));
+				g.drawLine(x + i, y + dimension - i, x + dimension, y + dimension - i);
+				g.drawLine(x + dimension - 2 - i, y + i, x + dimension - 2 - i, y + dimension);
+
+				//Top and left bevels
+				g.setColor(new Color(255,135,14));
+				g.drawLine(x + 1, y + i, x + dimension - 2 - i, y + i);
+				g.drawLine(x + 1 + i, y, x + i, y + dimension - i);
+			}
 		}
 	}
 

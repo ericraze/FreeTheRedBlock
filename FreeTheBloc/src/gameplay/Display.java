@@ -3,17 +3,26 @@ package gameplay;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JPanel;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import components.Game;
+import audio.GameMusic;
 
 public class Display {
 
@@ -22,6 +31,8 @@ public class Display {
 	int[][] layout; // layout of the game
 	int perfectScore; // best possible score for the given game
 	int levelChosen; // The level chosen by the player
+	private String musicFile; // Filepath for playing music
+	GameMusic gameMusic; // GameMusic object to play music
 
 	JFrame f = new JFrame("Free The Block"); // Window that the game is displayed in
 
@@ -49,7 +60,10 @@ public class Display {
 	// Game
 	Game game;
 
-	public Display(int size) {
+	public Display(int size) throws IOException {
+
+		this.musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\menuSelectionMusic.wav";
+
 		this.sizes = size;
 
 		// Level object to find the amount of games to determine the amount of level
@@ -73,6 +87,10 @@ public class Display {
 		containerPanel.add(levelsPanel, "l");
 
 		cl.show(containerPanel, "m");
+
+		// Play music initially
+		gameMusic = new GameMusic();
+		gameMusic.playMusic(musicFile);
 
 		// Action listeners
 		levelsButton.addActionListener(new ActionListener() {
@@ -134,40 +152,51 @@ public class Display {
 					layout = level.layout;
 					unitsToPixels = gameSize / layout[0].length;
 
+					System.out.println("eric");// eric
+
 					// Instantiating game and setting game panel to game object
-					game = new Game(layout, unitsToPixels, perfectScore);
+					game = new Game(layout, unitsToPixels, perfectScore, cl, containerPanel);
 					gamePanel = game;
 
-					//adding game to the card layout
+					// adding game to the card layout
 					containerPanel.add(gamePanel, "g");
 
-					//Show the game
+					// Show the game
 					cl.show(containerPanel, "g");
+
+					gameMusic.stop();
+					musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\gameMusic1.wav";
+
+					gameMusic.playMusic(musicFile);
+
 				}
 			}
 		};
 
 		// Instantiating level selection buttons
 		for (int i = 0; i < test.levelLayouts.length; i++) {
-			//Giving each button the appropriate name
+			// Giving each button the appropriate name
 			levelButtons[i] = new JButton(String.valueOf(i));
-			
-			//adding listeners and adding it to the panel for display
+
+			// adding listeners and adding it to the panel for display
 			levelButtons[i].addActionListener(listener);
 			levelsPanel.add(levelButtons[i]);
 		}
 
-		//setting up the frame
+		// setting up the frame
 		f.add(containerPanel);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.pack();
 		f.setSize(size, size);
+		f.setResizable(false);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		f.setLocation(dim.width / 2 - f.getSize().width / 2, dim.height / 2 - f.getSize().height / 2);
 		f.setVisible(true);
 
 	}
 
 	public void namePanel() {
-		
+
 		// Printing name and setting up fonts
 		JLabel nameLabel = new JLabel();
 		String nameMessage = "A Game By Ericraze";
@@ -177,29 +206,39 @@ public class Display {
 		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 		nameLabel.setVerticalAlignment(JLabel.CENTER);
 
-		//adding everything to name panel
+		// adding everything to name panel
 		namePanel.add(menuButtonName, BorderLayout.SOUTH);
 		namePanel.add(nameLabel, BorderLayout.CENTER);
 		namePanel.setBackground(Color.blue);
 
 	}
 
-	public void menuPanel() {
+	public void menuPanel() throws IOException {
 
-		//making and setting up necessary panels
+		BufferedImage img = ImageIO
+				.read(new File("C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\gameplay\\mainMenuBackground.jpg"));
+		
+		ImageIcon image = new ImageIcon(img);
+		
+		JLabel labelImage = new JLabel("", image, JLabel.CENTER);
+		labelImage.setSize(sizes, sizes);
+		
+		
+		// making and setting up necessary panels
 		menuPanel.setLayout(new BorderLayout());
 		JPanel menuPanelSouth = new JPanel(new GridLayout(1, 3));
 
-		//background
-		menuPanel.setBackground(Color.blue);
-		menuPanelSouth.setBackground(Color.blue);
+		// background
+		//menuPanel.setBackground(Color.blue);
+		//menuPanelSouth.setBackground(Color.blue);
 
-		//Buttons
+		// Buttons
+		
 		menuPanelSouth.add(nameButton);
 		menuPanelSouth.add(levelsButton);
 		menuPanelSouth.add(instructionsButton);
 
-		//Displaying messages
+		// Displaying messages
 		String sMessage = "Free The Red Block";
 		JLabel message = new JLabel();
 		message.setFont(new Font("Monospace", Font.BOLD, 36));
@@ -208,18 +247,21 @@ public class Display {
 		message.setHorizontalAlignment(JLabel.CENTER);
 		message.setVerticalAlignment(JLabel.CENTER);
 
-		//adding to menuPanel
-		menuPanel.add(message, BorderLayout.CENTER);
+		// adding to menuPanel
+		JPanel menuPanelCenter = new JPanel();
+		menuPanelCenter.add(labelImage, BorderLayout.SOUTH);
+		menuPanel.add(menuPanelCenter, BorderLayout.CENTER);
+		menuPanel.add(message, BorderLayout.NORTH);
 		menuPanel.add(menuPanelSouth, BorderLayout.SOUTH);
 	}
 
 	public void instructionsPanel() {
-		
-		//Setting layout for the instructions panel
+
+		// Setting layout for the instructions panel
 		instructionsPanel.setLayout(new BorderLayout());
 		JLabel instructions = new JLabel();
-		
-		//Instructions
+
+		// Instructions
 		String sInstructions = "<html>Free The Red Block<br>An Intuitive Puzzle Game<br><br>A puzzle is solved when the red block is "
 				+ "located above the gate, a yellow square.<br>"
 				+ "The gate is always on the rightmost side of the puzzle, across from the red block. "
@@ -231,14 +273,14 @@ public class Display {
 				+ "Blocks cannot move through each other or the boundaries of the puzzle.<br>"
 				+ "Try to solve each puzzle using the fewest moves possible!<br><br>" + "GOOD LUCK</html>";
 
-		//Setting font, color and alignment of instructions
+		// Setting font, color and alignment of instructions
 		instructions.setFont(new Font("Monospace", Font.PLAIN, 14));
-		instructions.setForeground(new Color(220,220,220));
+		instructions.setForeground(new Color(220, 220, 220));
 		instructions.setText("<html><div style='text-align:;'>" + sInstructions + "</div></html>");
 		instructions.setHorizontalAlignment(JLabel.CENTER);
 		instructions.setVerticalAlignment(JLabel.CENTER);
 
-		//adding to the instructions panel
+		// adding to the instructions panel
 		instructionsPanel.setBackground(Color.DARK_GRAY);
 		instructionsPanel.add(instructions, BorderLayout.CENTER);
 		instructionsPanel.add(menuButtonInstructions, BorderLayout.SOUTH);
