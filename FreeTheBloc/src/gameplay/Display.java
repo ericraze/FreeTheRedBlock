@@ -18,56 +18,62 @@ import components.Game;
 public class Display {
 
 	int unitsToPixels;
-	int size, gameSize;
+	int sizes, gameSize;
 	int[][] layout;
 	int perfectScore;
+	int levelChosen;
 
 	JFrame f = new JFrame("Free The Block");
 	JPanel containerPanel = new JPanel();
-	JPanel gamePanel;
+	JPanel gamePanel = new JPanel();
 	JPanel menuPanel = new JPanel();
 	JPanel namePanel = new JPanel(new BorderLayout());// eric
 	JPanel instructionsPanel = new JPanel();
+	JPanel levelsPanel = new JPanel();
 
-	JButton gameButton = new JButton("Game");
+	JButton levelsButton = new JButton("Levels");
 	JButton menuButtonName = new JButton("Menu");
 	JButton nameButton = new JButton("Name");
 	JButton menuButtonInstructions = new JButton("Menu");
 	JButton instructionsButton = new JButton("Instructions");
+
+	// Level buttons
+	JButton[] levelButtons;
 
 	CardLayout cl = new CardLayout();
 
 	Game game;
 
 	public Display(int size) {
+		this.sizes = size;
 		
-		Level level = new Level(2);
+		Level test = new Level(0);
 		
-		this.perfectScore = level.perfectScore;
-		this.size = size;
-		this.gameSize = size - 100;
-		this.layout = level.layout;
-		this.unitsToPixels = gameSize / this.layout[0].length;
-		this.game = new Game(layout, unitsToPixels, perfectScore);
+		levelButtons = new JButton[test.levelLayouts.length];
+		
+		// Level Buttons listener
+		
+
+		
 
 		namePanel();
 		menuPanel();
 		instructionsPanel();
-		
+
 		containerPanel.setLayout(cl);
 
-		gamePanel = game;
 
 		containerPanel.add(menuPanel, "m");
-		containerPanel.add(gamePanel, "g");
 		containerPanel.add(namePanel, "n");
 		containerPanel.add(instructionsPanel, "i");
+		containerPanel.add(levelsPanel, "l");
+		
 		cl.show(containerPanel, "m");
 
-		gameButton.addActionListener(new ActionListener() {
+		levelsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				cl.show(containerPanel, "g");
+				cl.show(containerPanel, "l");
 			}
 		});
 
@@ -91,13 +97,48 @@ public class Display {
 				cl.show(containerPanel, "n");
 			}
 		});
-		
+
 		instructionsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				cl.show(containerPanel, "i");
 			}
 		});
+		
+		ActionListener listener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource() instanceof JButton) {
+					String text = ((JButton) e.getSource()).getText();
+					levelChosen = Integer.parseInt(text);
+					
+					Level level = new Level(levelChosen);
+
+					
+					
+					perfectScore = level.perfectScore;
+					gameSize = sizes - 100;
+					layout = level.layout;
+					unitsToPixels = gameSize / layout[0].length;
+
+					
+					game = new Game(layout, unitsToPixels, perfectScore);
+					gamePanel = game;
+					
+					containerPanel.add(gamePanel, "g");
+					
+					cl.show(containerPanel, "g");
+				}
+			}
+		};
+		
+		//Instantiating level selection buttons
+		
+				for (int i = 0; i < test.levelLayouts.length; i++) {
+					levelButtons[i] = new JButton(String.valueOf(i));
+					levelButtons[i].addActionListener(listener);
+					levelsPanel.add(levelButtons[i]);
+				}
 
 		f.add(containerPanel);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -112,11 +153,11 @@ public class Display {
 		JLabel nameLabel = new JLabel();
 		String nameMessage = "A Game By Ericraze";
 		nameLabel.setForeground(Color.red);
-		nameLabel.setFont(new Font("Monospace", Font.BOLD, size / nameMessage.length()));
+		nameLabel.setFont(new Font("Monospace", Font.BOLD, sizes / nameMessage.length()));
 		nameLabel.setText("<html><div style='text-align: center;'>" + nameMessage + "</div></html>");
 		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 		nameLabel.setVerticalAlignment(JLabel.CENTER);
-		
+
 		namePanel.add(menuButtonName, BorderLayout.SOUTH);
 		namePanel.add(nameLabel, BorderLayout.CENTER);
 		namePanel.setBackground(Color.blue);
@@ -130,12 +171,11 @@ public class Display {
 
 		menuPanel.setBackground(Color.blue);
 		menuPanelSouth.setBackground(Color.blue);
-		
+
 		menuPanelSouth.add(nameButton);
-		menuPanelSouth.add(gameButton);
+		menuPanelSouth.add(levelsButton);
 		menuPanelSouth.add(instructionsButton);
-		
-		
+
 		String sMessage = "Free The Red Block";
 		JLabel message = new JLabel();
 		message.setFont(new Font("Monospace", Font.BOLD, 36));
@@ -143,7 +183,7 @@ public class Display {
 		message.setText("<html><div style='text-align: center;'>" + sMessage + "</div></html>");
 		message.setHorizontalAlignment(JLabel.CENTER);
 		message.setVerticalAlignment(JLabel.CENTER);
-		
+
 		menuPanel.add(message, BorderLayout.CENTER);
 		menuPanel.add(menuPanelSouth, BorderLayout.SOUTH);
 	}
@@ -151,7 +191,7 @@ public class Display {
 	public void instructionsPanel() {
 		instructionsPanel.setLayout(new BorderLayout());
 
-		String sInstructions =  "<html>Free The Red Block<br>An Intuitive Puzzle Game<br><br>A puzzle is solved when the red block is "
+		String sInstructions = "<html>Free The Red Block<br>An Intuitive Puzzle Game<br><br>A puzzle is solved when the red block is "
 				+ "located above the gate, a yellow square.<br>"
 				+ "The gate is always on the rightmost side of the puzzle, across from the red block. "
 				+ "The direction<br>in which to slide the red block is shown by the double arrows located to the right of the puzzle<br>"
@@ -160,8 +200,7 @@ public class Display {
 				+ "Horizontal blocks may only be dragged along their X-axis.<br>"
 				+ "Vertical blocks can only slide on their Y-axis.<br>"
 				+ "Blocks cannot move through each other or the boundaries of the puzzle.<br>"
-				+ "Try to solve each puzzle using the fewest moves possible!<br><br>"
-				+ "GOOD LUCK</html>";
+				+ "Try to solve each puzzle using the fewest moves possible!<br><br>" + "GOOD LUCK</html>";
 
 		JLabel instructions = new JLabel();
 		instructions.setFont(new Font("Monospace", Font.BOLD, 12));
@@ -169,7 +208,7 @@ public class Display {
 		instructions.setText("<html><div style='text-align: center;'>" + sInstructions + "</div></html>");
 		instructions.setHorizontalAlignment(JLabel.CENTER);
 		instructions.setVerticalAlignment(JLabel.CENTER);
-		
+
 		instructionsPanel.setBackground(Color.blue);
 		instructionsPanel.add(instructions, BorderLayout.CENTER);
 		instructionsPanel.add(menuButtonInstructions, BorderLayout.SOUTH);
