@@ -3,6 +3,7 @@ package components;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Line2D;
 
 public class Block {
 
@@ -19,7 +20,6 @@ public class Block {
 	private int[] initialPosition; // initial position of block in array
 	private int eastConstraint, westConstraint, northConstraint, southConstraint; // Block movement constraints
 	private int widthCells, heightCells; // width and height of block in cells
-
 
 	/**
 	 * Block constructor
@@ -71,8 +71,22 @@ public class Block {
 			g.drawRect(x, y, width, height);
 
 			// fill block
-			g.setColor(Color.green);
+			g.setColor(new Color(0, 204, 0));
 			g.fillRect(x + 1, y + 1, width - 2, height - 2);
+
+			// Making bevels to appear 3D
+			for (int i = 0; i < game.unitsToPixels / 12; i++) {
+				//Bottom and right bevels
+				g.setColor(new Color(0, 179, 0));
+				g.drawLine(x + i, y + height - i, x + width - 2, y + height - i);
+				g.drawLine(x + width - 2 - i, y + i, x + width - 2 - i, y + height);
+
+				//Top and left bevels
+				g.setColor(new Color(0, 230, 0));
+				g.drawLine(x + 1, y + i, x + width - 2 - i, y + i);
+				g.drawLine(x + 1 + i, y, x + i, y + height - i);
+			}
+
 			if (isStart) {
 				updateCells();
 				isStart = false;
@@ -83,8 +97,21 @@ public class Block {
 			g.drawRect(x, y, width, height);
 
 			// fill block
-			g.setColor(Color.red);
+			g.setColor(new Color(204, 0, 0));
 			g.fillRect(x + 1, y + 1, width - 2, height - 2);
+
+			// Making bevels to appear 3D
+			for (int i = 0; i < game.unitsToPixels / 12; i++) {
+				// Bottom and right bevels
+				g.setColor(new Color(179,0,0));
+				g.drawLine(x + i, y + height - i, x + width - 2, y + height - i);
+				g.drawLine(x + width - 2 - i, y + i, x + width - 2 - i, y + height);
+
+				//Top and left bevels
+				g.setColor(new Color(230,0,0));
+				g.drawLine(x + 1, y + i, x + width - 2 - i, y + i);
+				g.drawLine(x + 1 + i, y, x + i, y + height - i);
+			}
 
 			if (isStart) {
 				updateCells();
@@ -167,14 +194,14 @@ public class Block {
 			snapTo();
 			updateCells();
 			isMoved = false;
-			
-			//Increase moves if the block positon has moved
-			int[] newBlockPos = cellOn(x,y);
-			if(Math.abs(newBlockPos[0] - initialPosition[0]) >= 1 || Math.abs(newBlockPos[1] - initialPosition[1]) >= 1) {
+
+			// Increase moves if the block positon has moved
+			int[] newBlockPos = cellOn(x, y);
+			if (Math.abs(newBlockPos[0] - initialPosition[0]) >= 1
+					|| Math.abs(newBlockPos[1] - initialPosition[1]) >= 1) {
 				game.numMoves++;
 			}
-			
-			
+
 		}
 		// resetting the offsets
 		xOffset = 0;

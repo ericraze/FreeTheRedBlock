@@ -21,6 +21,18 @@ public class Level {
 				
 				
 			},
+			
+			{
+				{0, 0, 32, 23, 0, 0},
+				{0, 0, 0, 0, 0, 13},
+				{13, 0, 23, 0, 0, 0},
+				{0, 22, 0, 12, 0, 0},
+				{0, 0, 0, 0, 22, 0},
+				{0, 0, 0, 0, 0, 0},
+
+			},
+			
+			
 			{
 				{12, 0, 32, 22, 0, 0},
 				{0, 13, 0, 0, 12, 0},
@@ -28,17 +40,13 @@ public class Level {
 				{13, 0, 22, 0, 0, 0},
 				{0, 0, 23, 0, 0, 0},
 				{0, 22, 0, 0, 22, 0},
-				
-				
-				
-				
-				
+
 			}
 			
 			
 	};
 
-	public int[] perfectScores = {4, 6, 12};
+	public int[] perfectScores = {4, 6, 11, 12};
 	
 	public Level(int level) {
 		this.perfectScore = perfectScores[level];

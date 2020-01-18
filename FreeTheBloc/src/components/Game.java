@@ -20,7 +20,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	int dimension; // length of a single unit in game in pixels
 	int unitsToPixels; // amount of pixels in a unit
 	int indexBoundary; // width and height of game in cells
-	private int redY; //Y Value of the red Block
+	private int redY; // Y Value of the red Block
 	private int perfectScore; // Best score user can achieve
 
 	/**
@@ -42,13 +42,12 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
 		this.unitsToPixels = unitsToPixels;
 		this.perfectScore = perfectScore;
-		
+
 		// setting size of the game
 		this.dimension = gameLayout.length * unitsToPixels;
 		this.indexBoundary = (dimension / unitsToPixels) - 1;
 		this.numMoves = 0;
-		
-		
+
 		// Setting size of JPanel the block will be displayed in
 		setSize(dimension, dimension);
 
@@ -107,7 +106,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 					blocks[counter] = new Block(j * unitsToPixels, i * unitsToPixels,
 							gameLayout[j][i] % 10 * unitsToPixels, 1 * unitsToPixels, false, true, cells, this);
 					counter++;
-					redY = (i + 1) * unitsToPixels - (unitsToPixels /4);
+					redY = (i + 1) * unitsToPixels - (unitsToPixels / 4);
 
 				}
 
@@ -120,11 +119,11 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	 * Used to paint the game
 	 */
 	public void paintComponent(Graphics g) {
-		//Clearing then setting background
+		// Clearing then setting background
 		g.clearRect(0, 0, dimension + 100, dimension + 100);
 		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		if (!isWon) { //if game is not won
+		if (!isWon) { // if game is not won
 			for (int i = 0; i < cells.length; i++) {
 				for (int j = 0; j < cells[i].length; j++) {
 					// looping through and drawing cells
@@ -137,33 +136,32 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 				blocks[i].draw(g);
 			}
 		} else {
-			//If game is won
+			// If game is won
 			g.setColor(Color.ORANGE);
 			g.fillRect(0, 0, dimension, dimension);
 		}
 
-		//drawing score
+		// drawing score
 		g.setColor(Color.MAGENTA);
-		String movesMessage = "Moves: "+numMoves;
+		String movesMessage = "Moves: " + numMoves;
 		int fontSize = 90 / movesMessage.length();
 		Font font = new Font("Monospaced", Font.BOLD, fontSize + 5);
 		g.setFont(font);
-		g.drawString(movesMessage, unitsToPixels * cells.length + 5 , dimension / 2 + 50);
-		
+		g.drawString(movesMessage, unitsToPixels * cells.length + 5, dimension / 2 + 50);
+
 		g.setColor(Color.RED);
 		font = new Font("Monospaced", Font.ITALIC, fontSize + 5);
 		g.setFont(font);
 		g.drawString("Perfect", unitsToPixels * cells.length + 5, redY - 150);
 		g.drawString("Score:", unitsToPixels * cells.length + 5, redY - 125);
 		g.drawString(String.valueOf(perfectScore), unitsToPixels * cells.length + 5, redY - 100);
-		
-		//Drawing arrows
+
+		// Drawing arrows
 		g.setColor(Color.orange);
 		font = new Font("Monospaced", Font.BOLD, 75);
 		g.setFont(font);
 		g.drawString("\u21c9", unitsToPixels * cells.length + 5, redY);
-		
-		
+
 	}
 
 	/**
@@ -185,7 +183,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 			blocks[i].released(e);
 		}
 
-		//Checking to see if game is won
+		// Checking to see if game is won
 		for (int i = 0; i < cells.length; i++) {
 			for (int j = 0; j < cells[i].length; j++) {
 				isWon = cells[indexBoundary][indexBoundary / 2].getWin();
@@ -207,12 +205,6 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
 	}
 
-	
-	
-	
-	
-	
-	
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
