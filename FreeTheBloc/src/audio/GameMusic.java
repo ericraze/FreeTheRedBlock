@@ -26,9 +26,9 @@ public class GameMusic {
 
 				audioInput = AudioSystem.getAudioInputStream(musicPath);
 				clip = AudioSystem.getClip();
-			//	clip.open(audioInput);
-			//	clip.start();//eric
-			//	clip.loop(Clip.LOOP_CONTINUOUSLY);
+				clip.open(audioInput);
+				clip.start();//eric
+				clip.loop(Clip.LOOP_CONTINUOUSLY);
 
 			} else {
 				System.out.println("Cant find file");// eric

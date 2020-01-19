@@ -15,6 +15,8 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import audio.GameMusic;
+
 public class Game extends JPanel implements MouseListener, MouseMotionListener {
 
 	private int numBlocks; // number of blocks in game
@@ -30,6 +32,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	private int perfectScore; // Best score user can achieve
 	private CardLayout cardLayout; // Cardlayout used in display
 	private JPanel container; // Container Panel used in card layout
+	private GameMusic gameMusics; //gameMusic object to play music
 
 	/**
 	 * Game Constructor Used to create new games
@@ -51,9 +54,11 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	 * @param cl             the cardLayout used in this game
 	 *
 	 * @param containerPanel the containerPanel used in the cardLayout
+	 * 
+	 * @param gameMusic a music object to play music
 	 */
 	// 0 = blank, 10's = horizontal, 20's = vertical, 30 = red
-	public Game(int[][] gameLayout, int unitsToPixels, int perfectScore, CardLayout cl, JPanel containerPanel) {
+	public Game(int[][] gameLayout, int unitsToPixels, int perfectScore, CardLayout cl, JPanel containerPanel, GameMusic gameMusic) {
 
 		setLayout(new BorderLayout());
 		
@@ -61,6 +66,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		this.perfectScore = perfectScore;
 		this.cardLayout = cl;
 		this.container = containerPanel;
+		this.gameMusics = gameMusic;
 
 		// setting size of the game
 		this.dimension = gameLayout.length * unitsToPixels;
@@ -149,6 +155,8 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 			public void actionPerformed(ActionEvent ae) {
 				// show instructions screen
 				cardLayout.show(container, "m");
+				gameMusics.stop();
+				gameMusics.playMusic("C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\menuSelectionMusic.wav");
 			}
 		});
 

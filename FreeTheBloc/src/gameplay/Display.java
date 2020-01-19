@@ -47,7 +47,7 @@ public class Display {
 	// Buttons used to switch between scenes
 	JButton levelsButton = new JButton("Levels");
 	JButton menuButtonName = new JButton("Menu");
-	JButton nameButton = new JButton("Name");
+	JButton nameButton = new JButton("Author");
 	JButton menuButtonInstructions = new JButton("Menu");
 	JButton instructionsButton = new JButton("Instructions");
 
@@ -155,7 +155,7 @@ public class Display {
 					System.out.println("eric");// eric
 
 					// Instantiating game and setting game panel to game object
-					game = new Game(layout, unitsToPixels, perfectScore, cl, containerPanel);
+					game = new Game(layout, unitsToPixels, perfectScore, cl, containerPanel, gameMusic);
 					gamePanel = game;
 
 					// adding game to the card layout
@@ -199,9 +199,9 @@ public class Display {
 
 		// Printing name and setting up fonts
 		JLabel nameLabel = new JLabel();
-		String nameMessage = "A Game By Ericraze";
-		nameLabel.setForeground(Color.red);
-		nameLabel.setFont(new Font("Monospace", Font.BOLD, sizes / nameMessage.length()));
+		String nameMessage = "<html>A Game By<br>@ericraze</html>";
+		nameLabel.setForeground(new Color(204, 0, 0));
+		nameLabel.setFont(new Font("Monospace", Font.ROMAN_BASELINE, sizes / 10));
 		nameLabel.setText("<html><div style='text-align: center;'>" + nameMessage + "</div></html>");
 		nameLabel.setHorizontalAlignment(JLabel.CENTER);
 		nameLabel.setVerticalAlignment(JLabel.CENTER);
@@ -209,7 +209,7 @@ public class Display {
 		// adding everything to name panel
 		namePanel.add(menuButtonName, BorderLayout.SOUTH);
 		namePanel.add(nameLabel, BorderLayout.CENTER);
-		namePanel.setBackground(Color.blue);
+		namePanel.setBackground(new Color(230,230,230));
 
 	}
 
@@ -227,11 +227,15 @@ public class Display {
 		// making and setting up necessary panels
 		menuPanel.setLayout(new BorderLayout());
 		JPanel menuPanelSouth = new JPanel(new GridLayout(1, 3));
-
-		// background
-		//menuPanel.setBackground(Color.blue);
-		//menuPanelSouth.setBackground(Color.blue);
-
+		JPanel menuPanelCenter = new JPanel();
+		
+		
+		
+		// backgrounds
+		menuPanel.setBackground(Color.DARK_GRAY);
+		menuPanelSouth.setBackground(Color.DARK_GRAY);
+		menuPanelCenter.setBackground(Color.DARK_GRAY);
+		
 		// Buttons
 		
 		menuPanelSouth.add(nameButton);
@@ -248,7 +252,7 @@ public class Display {
 		message.setVerticalAlignment(JLabel.CENTER);
 
 		// adding to menuPanel
-		JPanel menuPanelCenter = new JPanel();
+		
 		menuPanelCenter.add(labelImage, BorderLayout.SOUTH);
 		menuPanel.add(menuPanelCenter, BorderLayout.CENTER);
 		menuPanel.add(message, BorderLayout.NORTH);
@@ -262,26 +266,25 @@ public class Display {
 		JLabel instructions = new JLabel();
 
 		// Instructions
-		String sInstructions = "<html>Free The Red Block<br>An Intuitive Puzzle Game<br><br>A puzzle is solved when the red block is "
-				+ "located above the gate, a yellow square.<br>"
-				+ "The gate is always on the rightmost side of the puzzle, across from the red block. "
-				+ "The direction<br>in which to slide the red block is shown by the double arrows located to the right of the puzzle<br>"
-				+ "However, there will be other blocks that obstruct the red block's path.<br>"
-				+ "To rearrange any block you must click on, then drag the block you wish to move.<br>"
+		String sInstructions = "<html>Free The Red Block<br>A Puzzle Game<br><br>A puzzle is solved when the red block is "
+				+ "slid to the gate, an orange square.<br>"
+				+ "The gate is always to the right of the red block, its position indicated by arrows.<br>"
+				+ "Blue blocks obstruct the red's path to the gate and must be rearranged.<br>"
+				+ "To move a block you must click on, then drag the block you wish to move.<br>"
 				+ "Horizontal blocks may only be dragged along their X-axis.<br>"
 				+ "Vertical blocks can only slide on their Y-axis.<br>"
 				+ "Blocks cannot move through each other or the boundaries of the puzzle.<br>"
-				+ "Try to solve each puzzle using the fewest moves possible!<br><br>" + "GOOD LUCK</html>";
+				+ "Try to solve each puzzle using the fewest moves possible!<br><br>" + "TIME TO FAIL</html>";
 
 		// Setting font, color and alignment of instructions
-		instructions.setFont(new Font("Monospace", Font.PLAIN, 14));
-		instructions.setForeground(new Color(220, 220, 220));
+		instructions.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+		instructions.setForeground(new Color(204, 0, 0));
 		instructions.setText("<html><div style='text-align:;'>" + sInstructions + "</div></html>");
 		instructions.setHorizontalAlignment(JLabel.CENTER);
 		instructions.setVerticalAlignment(JLabel.CENTER);
 
 		// adding to the instructions panel
-		instructionsPanel.setBackground(Color.DARK_GRAY);
+		instructionsPanel.setBackground(new Color(230,230,230));
 		instructionsPanel.add(instructions, BorderLayout.CENTER);
 		instructionsPanel.add(menuButtonInstructions, BorderLayout.SOUTH);
 
