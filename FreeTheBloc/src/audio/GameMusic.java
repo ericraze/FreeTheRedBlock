@@ -15,31 +15,29 @@ public class GameMusic {
 		
 	}
 	
+	// Music playing method
 	public void playMusic(String musicLocation) {
 
-		
 		try {
 
 			File musicPath = new File(musicLocation);
 
 			if (musicPath.exists()) {
 
+				//playing music
 				audioInput = AudioSystem.getAudioInputStream(musicPath);
 				clip = AudioSystem.getClip();
 				clip.open(audioInput);
-				clip.start();//eric
+				clip.start();
 				clip.loop(Clip.LOOP_CONTINUOUSLY);
 
-			} else {
-				System.out.println("Cant find file");// eric
-			}
-
+			} 
 		} catch (Exception ex) {
-			ex.printStackTrace();// eric
 		}
 
 	}
 	
+	//Stopping music
 	public void stop() {
 		clip.stop();
 	}

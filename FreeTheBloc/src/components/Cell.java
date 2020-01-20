@@ -163,6 +163,7 @@ public class Cell {
 		if (isGate) {
 			if (value == '3') {
 				// if this cell is gate and the red block is above it, then game is won
+				game.checkMoves = false;
 				return true;
 			}
 		}

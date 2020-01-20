@@ -199,6 +199,9 @@ public class Block {
 			if (Math.abs(newBlockPos[0] - initialPosition[0]) >= 1
 					|| Math.abs(newBlockPos[1] - initialPosition[1]) >= 1) {
 				game.numMoves++;
+				if(game.checkMoves) {
+					game.winMoves = game.numMoves;
+				}
 			}
 
 		}

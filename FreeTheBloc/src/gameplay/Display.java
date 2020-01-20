@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,7 +39,7 @@ public class Display {
 	JPanel containerPanel = new JPanel();
 	JPanel gamePanel = new JPanel();
 	JPanel menuPanel = new JPanel();
-	JPanel namePanel = new JPanel(new BorderLayout());// eric
+	JPanel namePanel = new JPanel(new BorderLayout());
 	JPanel instructionsPanel = new JPanel();
 	JPanel levelsPanel = new JPanel();
 
@@ -70,13 +69,70 @@ public class Display {
 		// selection buttons
 		Level test = new Level(0);
 
+		// Checking to see if level buttons are pressed
+		ActionListener listener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (e.getSource() instanceof JButton) {
+
+					// Converting text of JButton to int
+					String text = ((JButton) e.getSource()).getText();
+					levelChosen = Integer.parseInt(text);
+
+					// New instance of level with the value of level button that is pressed
+					Level level = new Level(levelChosen);
+
+					// Setup for the new game
+					perfectScore = level.perfectScore;
+					gameSize = sizes - 100;
+					layout = level.layout;
+					unitsToPixels = gameSize / layout[0].length;
+
+					// Instantiating game and setting game panel to game object
+					game = new Game(layout, unitsToPixels, perfectScore, cl, containerPanel, gameMusic);
+					gamePanel = game;
+
+					// adding game to the card layout
+					containerPanel.add(gamePanel, "g");
+
+					// Show the game
+					cl.show(containerPanel, "g");
+
+					//Switching music depending on level chosen
+					gameMusic.stop();
+					if (Integer.parseInt(((JButton) e.getSource()).getText()) < levelButtons.length / 3) { // if easy level
+						musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\easyLevelMusic.wav";
+					} else if (Integer.parseInt(((JButton) e.getSource()).getText()) < levelButtons.length * 2 / 3) { //if medium level
+						musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\mediumLevelMusic.wav";
+					} else if (Integer.parseInt(((JButton) e.getSource()).getText()) < levelButtons.length - 1) { // if hard level
+						musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\hardLevelMusic.wav";
+					} else if (Integer.parseInt(((JButton) e.getSource()).getText()) == levelButtons.length - 1) { // if last level
+						musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\lastLevelMusic.wav";
+					}
+
+					gameMusic.playMusic(musicFile);
+
+				}
+			}
+		};
 		// Initializing array of buttons for level selection
 		levelButtons = new JButton[test.levelLayouts.length];
+
+		// Instantiating level selection buttons
+		for (int i = 0; i < test.levelLayouts.length; i++) {
+			// Giving each button the appropriate name
+			levelButtons[i] = new JButton(String.valueOf(i));
+
+			// adding listeners
+			levelButtons[i].addActionListener(listener);
+
+		}
 
 		// Setting up the panels
 		namePanel();
 		menuPanel();
 		instructionsPanel();
+		levelsPanel();
 
 		// Setting up the cardlayout
 		containerPanel.setLayout(cl);
@@ -133,56 +189,6 @@ public class Display {
 			}
 		});
 
-		// Checking to see if level buttons are pressed
-		ActionListener listener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() instanceof JButton) {
-
-					// Converting text of JButton to int
-					String text = ((JButton) e.getSource()).getText();
-					levelChosen = Integer.parseInt(text);
-
-					// New instance of level with the value of level button that is pressed
-					Level level = new Level(levelChosen);
-
-					// Setup for the new game
-					perfectScore = level.perfectScore;
-					gameSize = sizes - 100;
-					layout = level.layout;
-					unitsToPixels = gameSize / layout[0].length;
-
-					System.out.println("eric");// eric
-
-					// Instantiating game and setting game panel to game object
-					game = new Game(layout, unitsToPixels, perfectScore, cl, containerPanel, gameMusic);
-					gamePanel = game;
-
-					// adding game to the card layout
-					containerPanel.add(gamePanel, "g");
-
-					// Show the game
-					cl.show(containerPanel, "g");
-
-					gameMusic.stop();
-					musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\gameMusic1.wav";
-
-					gameMusic.playMusic(musicFile);
-
-				}
-			}
-		};
-
-		// Instantiating level selection buttons
-		for (int i = 0; i < test.levelLayouts.length; i++) {
-			// Giving each button the appropriate name
-			levelButtons[i] = new JButton(String.valueOf(i));
-
-			// adding listeners and adding it to the panel for display
-			levelButtons[i].addActionListener(listener);
-			levelsPanel.add(levelButtons[i]);
-		}
-
 		// setting up the frame
 		f.add(containerPanel);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -209,35 +215,32 @@ public class Display {
 		// adding everything to name panel
 		namePanel.add(menuButtonName, BorderLayout.SOUTH);
 		namePanel.add(nameLabel, BorderLayout.CENTER);
-		namePanel.setBackground(new Color(230,230,230));
+		namePanel.setBackground(new Color(230, 230, 230));
 
 	}
 
 	public void menuPanel() throws IOException {
 
-		BufferedImage img = ImageIO
-				.read(new File("C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\gameplay\\mainMenuBackground.jpg"));
-		
+		BufferedImage img = ImageIO.read(new File(
+				"C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\gameplay\\mainMenuBackground.jpg"));
+
 		ImageIcon image = new ImageIcon(img);
-		
+
 		JLabel labelImage = new JLabel("", image, JLabel.CENTER);
 		labelImage.setSize(sizes, sizes);
-		
-		
+
 		// making and setting up necessary panels
 		menuPanel.setLayout(new BorderLayout());
 		JPanel menuPanelSouth = new JPanel(new GridLayout(1, 3));
 		JPanel menuPanelCenter = new JPanel();
-		
-		
-		
+
 		// backgrounds
 		menuPanel.setBackground(Color.DARK_GRAY);
 		menuPanelSouth.setBackground(Color.DARK_GRAY);
 		menuPanelCenter.setBackground(Color.DARK_GRAY);
-		
+
 		// Buttons
-		
+
 		menuPanelSouth.add(nameButton);
 		menuPanelSouth.add(levelsButton);
 		menuPanelSouth.add(instructionsButton);
@@ -252,7 +255,7 @@ public class Display {
 		message.setVerticalAlignment(JLabel.CENTER);
 
 		// adding to menuPanel
-		
+
 		menuPanelCenter.add(labelImage, BorderLayout.SOUTH);
 		menuPanel.add(menuPanelCenter, BorderLayout.CENTER);
 		menuPanel.add(message, BorderLayout.NORTH);
@@ -267,7 +270,7 @@ public class Display {
 
 		// Instructions
 		String sInstructions = "<html>Free The Red Block<br>A Puzzle Game<br><br>A puzzle is solved when the red block is "
-				+ "slid to the gate, an orange square.<br>"
+				+ "slid onto the gate, an orange square.<br>"
 				+ "The gate is always to the right of the red block, its position indicated by arrows.<br>"
 				+ "Blue blocks obstruct the red's path to the gate and must be rearranged.<br>"
 				+ "To move a block you must click on, then drag the block you wish to move.<br>"
@@ -284,9 +287,78 @@ public class Display {
 		instructions.setVerticalAlignment(JLabel.CENTER);
 
 		// adding to the instructions panel
-		instructionsPanel.setBackground(new Color(230,230,230));
+		instructionsPanel.setBackground(new Color(230, 230, 230));
 		instructionsPanel.add(instructions, BorderLayout.CENTER);
 		instructionsPanel.add(menuButtonInstructions, BorderLayout.SOUTH);
+
+	}
+
+	public void levelsPanel() {
+
+		// Labels and panels
+		JPanel easyButtonsPanel = new JPanel(new BorderLayout());
+		JPanel mediumButtonsPanel = new JPanel(new BorderLayout());
+		JPanel hardButtonsPanel = new JPanel(new BorderLayout());
+
+		JPanel easyButtonsCenterPanel = new JPanel(new GridLayout(1, levelButtons.length / 3));
+		JPanel mediumButtonsCenterPanel = new JPanel(new GridLayout(1, levelButtons.length / 3));
+		JPanel hardButtonsCenterPanel = new JPanel(new GridLayout(1, levelButtons.length / 3));
+
+		JLabel easyLabel = new JLabel("Easy");
+		JLabel mediumLabel = new JLabel("Medium");
+		JLabel hardLabel = new JLabel("Hard");
+
+		// Setting fonts and alignments of all labels
+		easyLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+		easyLabel.setForeground(new Color(204, 0, 0));
+		easyLabel.setHorizontalAlignment(JLabel.CENTER);
+		easyLabel.setVerticalAlignment(JLabel.CENTER);
+
+		mediumLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+		mediumLabel.setForeground(new Color(204, 0, 0));
+		mediumLabel.setHorizontalAlignment(JLabel.CENTER);
+		mediumLabel.setVerticalAlignment(JLabel.CENTER);
+
+		hardLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
+		hardLabel.setForeground(new Color(204, 0, 0));
+		hardLabel.setHorizontalAlignment(JLabel.CENTER);
+		hardLabel.setVerticalAlignment(JLabel.CENTER);
+
+		// Adding buttons to their corresponding panel
+		for (int i = 0; i < levelButtons.length / 3; i++) {
+			easyButtonsCenterPanel.add(levelButtons[i], BorderLayout.CENTER);
+		}
+
+		// Adding buttons to their corresponding panel
+		for (int i = levelButtons.length / 3; i < levelButtons.length * 2 / 3; i++) {
+			mediumButtonsCenterPanel.add(levelButtons[i], BorderLayout.CENTER);
+		}
+
+		// Adding buttons to their corresponding panel
+		for (int i = levelButtons.length * 2 / 3; i < levelButtons.length; i++) {
+			hardButtonsCenterPanel.add(levelButtons[i], BorderLayout.CENTER);
+		}
+
+		// Adding panels and lables
+		easyButtonsPanel.add(easyLabel, BorderLayout.NORTH);
+		easyButtonsPanel.add(easyButtonsCenterPanel, BorderLayout.CENTER);
+
+		mediumButtonsPanel.add(mediumLabel, BorderLayout.NORTH);
+		mediumButtonsPanel.add(mediumButtonsCenterPanel, BorderLayout.CENTER);
+
+		hardButtonsPanel.add(hardLabel, BorderLayout.NORTH);
+		hardButtonsPanel.add(hardButtonsCenterPanel, BorderLayout.CENTER);
+
+		// Background of panels
+		easyButtonsPanel.setBackground(new Color(230, 230, 230));
+		mediumButtonsPanel.setBackground(new Color(230, 230, 230));
+		hardButtonsPanel.setBackground(new Color(230, 230, 230));
+
+		// Completing the levelsPanel
+		levelsPanel.setBackground(new Color(230, 230, 230));
+		levelsPanel.add(easyButtonsPanel);
+		levelsPanel.add(mediumButtonsPanel);
+		levelsPanel.add(hardButtonsPanel);
 
 	}
 

@@ -5,6 +5,7 @@ public class Level {
 	int[][] layout;
 	int perfectScore;
 	
+	//All levels
 	public int[][][] levelLayouts = {
 			
 			//Easy Levels
@@ -288,6 +289,7 @@ public class Level {
 			
 	};
 
+	//Perfect Scores
 	public int[] perfectScores = {8, 7, 8, 7, 7, 7, 7, 7, 7, 9,  
 								11, 10, 11, 10, 12, 13, 13, 11, 10, 10,  
 								10, 12, 11, 13, 14, 13, 14, 13, 13, 15};
