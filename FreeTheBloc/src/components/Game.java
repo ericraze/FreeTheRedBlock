@@ -157,8 +157,11 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 				// show instructions screen
 				cardLayout.show(container, "m");
 				gameMusics.stop();
-				gameMusics.playMusic(
-						"C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\menuSelectionMusic.wav");
+
+				String pathname = System.getProperty("user.dir");
+				String musicFile = pathname + "\\res\\easyLevelMusic.wav";
+
+				gameMusics.playMusic(musicFile);
 			}
 		});
 
@@ -211,8 +214,11 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 			// Playing victory music
 			if (playMusic) {
 				gameMusics.stop();
-				gameMusics.playMusic(
-						"C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\victoryMusic.wav");
+
+				String pathname = System.getProperty("user.dir");
+				String musicFile = pathname + "\\res\\victoryMusic.wav";
+
+				gameMusics.playMusic(musicFile);
 
 				playMusic = false;
 			}
@@ -303,7 +309,6 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override

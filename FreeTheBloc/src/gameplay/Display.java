@@ -61,7 +61,9 @@ public class Display {
 
 	public Display(int size) throws IOException {
 
-		this.musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\menuSelectionMusic.wav";
+		String pathname = System.getProperty("user.dir");
+
+		this.musicFile = pathname + "\\res\\menuSelectionMusic.wav";
 
 		this.sizes = size;
 
@@ -98,16 +100,25 @@ public class Display {
 					// Show the game
 					cl.show(containerPanel, "g");
 
-					//Switching music depending on level chosen
+					// Switching music depending on level chosen
 					gameMusic.stop();
-					if (Integer.parseInt(((JButton) e.getSource()).getText()) < levelButtons.length / 3) { // if easy level
-						musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\easyLevelMusic.wav";
-					} else if (Integer.parseInt(((JButton) e.getSource()).getText()) < levelButtons.length * 2 / 3) { //if medium level
-						musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\mediumLevelMusic.wav";
-					} else if (Integer.parseInt(((JButton) e.getSource()).getText()) < levelButtons.length - 1) { // if hard level
-						musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\hardLevelMusic.wav";
-					} else if (Integer.parseInt(((JButton) e.getSource()).getText()) == levelButtons.length - 1) { // if last level
-						musicFile = "C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\lastLevelMusic.wav";
+					if (Integer.parseInt(((JButton) e.getSource()).getText()) < levelButtons.length / 3) { // if easy
+						String pathname = System.getProperty("user.dir");
+						musicFile = pathname + "\\res\\easyLevelMusic.wav";																			// level
+
+					} else if (Integer.parseInt(((JButton) e.getSource()).getText()) < levelButtons.length * 2 / 3) { // if
+						String pathname = System.getProperty("user.dir");
+						musicFile = pathname + "\\res\\mediumLevelMusic.wav";																									// medium
+																														// level
+
+					} else if (Integer.parseInt(((JButton) e.getSource()).getText()) < levelButtons.length - 1) { // if
+						String pathname = System.getProperty("user.dir");
+						musicFile = pathname + "\\res\\hardLevelMusic.wav";																								// hard
+
+					} else if (Integer.parseInt(((JButton) e.getSource()).getText()) == levelButtons.length - 1) { // if
+						String pathname = System.getProperty("user.dir");
+						musicFile = pathname + "\\res\\lastLevelMusic.wav";	
+						
 					}
 
 					gameMusic.playMusic(musicFile);
@@ -221,8 +232,11 @@ public class Display {
 
 	public void menuPanel() throws IOException {
 
-		BufferedImage img = ImageIO.read(new File(
-				"C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\gameplay\\mainMenuBackground.jpg"));
+		String pathname = System.getProperty("user.dir");
+
+		pathname += "\\res\\mainMenuBackground.jpg";
+
+		BufferedImage img = ImageIO.read(new File(pathname));
 
 		ImageIcon image = new ImageIcon(img);
 
