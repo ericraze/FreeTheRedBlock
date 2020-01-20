@@ -34,6 +34,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 	private CardLayout cardLayout; // Cardlayout used in display
 	private JPanel container; // Container Panel used in card layout
 	private GameMusic gameMusics; // gameMusic object to play music
+	private boolean playMusic;
 
 	/**
 	 * Game Constructor Used to create new games
@@ -75,6 +76,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		this.dimension = gameLayout.length * unitsToPixels;
 		this.indexBoundary = (dimension / unitsToPixels) - 1;
 		this.numMoves = 0;
+		playMusic = true;
 
 		// Setting size of JPanel the block will be displayed in
 		setSize(dimension, dimension);
@@ -206,14 +208,28 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 				blocks[i].draw(g);
 			}
 		} else {
+			// Playing victory music
+			if (playMusic) {
+				gameMusics.stop();
+				gameMusics.playMusic(
+						"C:\\Users\\Ericraze\\git\\FreeTheRedBlock\\FreeTheBloc\\src\\audio\\victoryMusic.wav");
+
+				playMusic = false;
+			}
 			// If game is won
 			g.setColor(new Color(244, 122, 0));
 			g.fillRect(0, 0, dimension + 100, dimension + 100 - 25);
 
+			// drawing winning message
+			g.setColor(new Color(217, 217, 217));
+			Font font = new Font("Monospaced", Font.BOLD, 60);
+			g.setFont(font);
+			g.drawString("You Won!", dimension / 2 - 100, dimension / 2 - 100);
+
 			// drawing Player score
 			g.setColor(new Color(77, 77, 255));
 			String movesMessage = "Your Score: " + winMoves;
-			Font font = new Font("Monospaced", Font.BOLD, 20);
+			font = new Font("Monospaced", Font.BOLD, 20);
 			g.setFont(font);
 			g.drawString(movesMessage, dimension / 2 - 100, dimension / 2 - 25);
 
@@ -251,7 +267,7 @@ public class Game extends JPanel implements MouseListener, MouseMotionListener {
 		// Checking to see if game is won
 		for (int i = 0; i < cells.length; i++) {
 			for (int j = 0; j < cells[i].length; j++) {
-				if (!isWon) {
+				if (!isWon) { // if red block is over gate cell
 					isWon = cells[indexBoundary][indexBoundary / 2].getWin();
 				}
 			}
